@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoshi Media | Campaigns, Social, Photography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Allura&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --red: #c8252e;
+            --red-dark: #a81c24;
+            --black: #1a1a1a;
+            --grey: #3a3a3a;
+            --cream: #e5e1d8;
+            --light-grey: #f5f5f5;
+            --white: #ffffff;
+            --shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light-grey);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        img { max-width: 100%; display: block; }
+        a { color: inherit; text-decoration: none; }
+        button, input, textarea, select { font-family: inherit; }
+
+        /* --- INTRO OVERLAY (EVERY REFRESH) --- */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--black);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .intro-logo-box {
+            position: relative;
+            padding: 1rem 2rem;
+            border: 4px solid var(--white);
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .intro-slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            animation: slideImages 2s steps(4) infinite;
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        @keyframes slideImages {
+            0% { background-color: var(--red); transform: translateY(0); }
+            25% { background-color: var(--black); transform: translateY(-25%); }
+            50% { background-color: var(--grey); transform: translateY(-50%); }
+            75% { background-color: var(--red); transform: translateY(-75%); }
+        }
+
+        .intro-text {
+            position: relative;
+            font-weight: 900;
+            font-size: 2.5rem;
+            color: var(--white);
+            letter-spacing: 4px;
+            z-index: 2;
+            text-transform: uppercase;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 26, 26, 0.95);
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 3px solid var(--red);
+        }
+
+        nav .logo {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--red);
+            letter-spacing: 2px;
+            border: 2px solid var(--white);
+            padding: 0.3rem 1rem;
+        }
+
+        nav ul { display: flex; list-style: none; gap: 1.6rem; align-items: center; }
+        nav a { text-decoration: none; color: var(--white); font-weight: 600; transition: 0.3s; }
+        nav a:hover { color: var(--red); }
+
+        .nav-cta {
+            background: var(--red);
+            color: var(--white);
+            padding: 0.7rem 1.2rem;
+            border-radius: 999px;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+        }
+        .nav-cta:hover { background: var(--red-dark); color: var(--white); }
+
+        /* --- GLOBAL LAYOUT --- */
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        section { padding: 6rem 0; }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .kicker {
+            color: var(--red);
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            margin: 0.6rem 0 0.6rem;
+            font-weight: 900;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--red) 0%, var(--black) 100%);
+        }
+
+        .sub {
+            color: var(--grey);
+            max-width: 70ch;
+            font-size: 1.05rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.9rem 1.4rem;
+            border-radius: 999px;
+            border: 2px solid var(--black);
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            transition: 0.2s;
+            background: var(--white);
+            color: var(--black);
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+        .btn-primary {
+            background: var(--red);
+            color: var(--white);
+            border-color: var(--red);
+        }
+        .btn-primary:hover { background: var(--red-dark); border-color: var(--red-dark); }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--black) 0%, var(--grey) 100%);
+            color: var(--white);
+            position: relative;
+        }
+
+        .hero-accent-line {
+            position: absolute;
+            width: 160%;
+            height: 4px;
+            background: var(--cream);
+            transform: rotate(-35deg);
+            opacity: 0.3;
+        }
+
+        .hero-content { position: relative; z-index: 10; text-align: left; }
+
+        .hero-splash-title {
+            font-size: clamp(2.6rem, 5vw, 4.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1.02;
+            margin-bottom: 0.8rem;
+        }
+
+        .hero-splash-title span { color: var(--red); }
+
+        .hero-name-script {
+            font-family: 'Allura', cursive;
+            font-size: 3.2rem;
+            color: var(--cream);
+            margin-bottom: 1.4rem;
+        }
+
+        .hero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .hero-meta { margin-top: 1.4rem; display: flex; gap: 1rem; flex-wrap: wrap; color: rgba(255,255,255,0.75); font-weight: 700; }
+
+        /* --- SERVICES --- */
+        .service-card {
+            background: var(--white);
+            padding: 2.2rem;
+            border-left: 5px solid var(--red);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateX(10px);
+            background: var(--black);
+            color: var(--white);
+            border-left-color: var(--cream);
+        }
+        .tagrow {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .tag {
+            padding: 0.35rem 0.6rem;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 999px;
+        }
+
+        /* --- PRICING --- */
+        .pricing-section {
+            background: var(--black);
+            color: var(--white);
+        }
+        .pricing-section h2 { color: var(--white); }
+        .pricing-section h2:after { background: linear-gradient(90deg, var(--red) 0%, var(--cream) 100%); }
+
+        .tier-card {
+            background: var(--grey);
+            padding: 2.4rem 2rem;
+            text-align: left;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+        .tier-card:hover {
+            border-color: var(--red);
+            transform: translateY(-8px);
+        }
+        .tier-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .tier-name { font-weight: 900; font-size: 1.3rem; }
+        .tier-price { font-size: 1.8rem; color: var(--red); font-weight: 900; }
+        .tier-desc { color: rgba(255,255,255,0.8); margin-top: 0.4rem; }
+
+        .tier-list {
+            list-style: none;
+            margin: 1.2rem 0 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+        .tier-list li { display: flex; gap: 0.6rem; align-items: flex-start; }
+        .check {
+            width: 18px; height: 18px;
+            border-radius: 4px;
+            background: rgba(200,37,46,0.2);
+            border: 1px solid rgba(200,37,46,0.5);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            font-size: 0.8rem;
+        }
+        .check::before { content: "v"; color: var(--white); font-weight: 900; }
+        .tier-card.featured { border-color: var(--red); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .badge {
+            display: inline-block;
+            background: var(--red);
+            color: var(--white);
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .one-time-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .one-time-card {
+            background: rgba(255,255,255,0.08);
+            padding: 1.6rem;
+            border-bottom: 3px solid var(--red);
+        }
+        .soon {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            color: var(--white);
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* --- WORK --- */
+        .filters {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .chip {
+            border: 1px solid rgba(0,0,0,0.15);
+            background: var(--white);
+            color: var(--black);
+            padding: 0.5rem 0.8rem;
+            border-radius: 999px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .chip.active { background: var(--red); color: var(--white); border-color: var(--red); }
+
+        .portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        .work {
+            position: relative;
+            overflow: hidden;
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: var(--shadow);
+        }
+        .work-top { padding: 1.4rem 1.4rem 0; display: flex; justify-content: space-between; gap: 1rem; }
+        .work h3 { margin: 0; font-size: 1.1rem; }
+        .type {
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: 1px solid rgba(0,0,0,0.15);
+            padding: 0.35rem 0.6rem;
+            border-radius: 999px;
+        }
+        .work-media {
+            margin: 1rem 1.4rem 1.4rem;
+            background: linear-gradient(135deg, rgba(200,37,46,0.2), rgba(0,0,0,0.05));
+            height: 140px;
+            position: relative;
+        }
+        .work-media::after {
+            content: "Image Placeholder";
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(0,0,0,0.35);
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+        .work-detail {
+            position: absolute;
+            inset: 0;
+            background: rgba(200,37,46,0.95);
+            color: var(--white);
+            padding: 1.4rem;
+            transform: translateY(100%);
+            transition: 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 0.6rem;
+        }
+        .work:hover .work-detail { transform: translateY(0); }
+        .mini {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .mini span {
+            background: rgba(255,255,255,0.2);
+            padding: 0.3rem 0.5rem;
+            border-radius: 999px;
+        }
+        .hidden { display: none !important; }
+
+        /* --- ABOUT --- */
+        .about-box {
+            background: var(--white);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--red);
+        }
+        .about-signature { font-family: 'Allura', cursive; font-size: 3rem; color: var(--red); margin-top: 1rem; }
+
+        .points { margin-top: 1.2rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .point {
+            background: var(--light-grey);
+            padding: 1rem;
+            border: 1px solid rgba(0,0,0,0.08);
+            font-weight: 700;
+        }
+        .point strong { display: block; margin-bottom: 0.4rem; }
+
+        /* --- CONTACT --- */
+        .contact {
+            background: var(--white);
+            border-top: 4px solid var(--red);
+        }
+        .contact-box {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 2rem;
+            align-items: start;
+        }
+        .contact-info {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .contact-info .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            padding-bottom: 0.6rem;
+        }
+        .contact-info span {
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 900;
+            color: var(--grey);
+        }
+
+        form {
+            background: var(--light-grey);
+            padding: 1.4rem;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .field { display: flex; flex-direction: column; gap: 0.5rem; }
+        label {
+            font-weight: 800;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--grey);
+        }
+        input, textarea, select {
+            padding: 0.7rem 0.8rem;
+            border: 1px solid rgba(0,0,0,0.15);
+            background: var(--white);
+        }
+        textarea { min-height: 100px; resize: vertical; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+        .hint { margin-top: 0.6rem; font-size: 0.85rem; color: var(--grey); }
+
+        .footer {
+            padding: 2rem 0 3rem;
+            color: var(--grey);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .footer .line {
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding-top: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        /* Smooth Scroll */
+        html { scroll-behavior: smooth; }
+
+        /* Responsive */
+        @media (max-width: 980px) {
+            nav { padding: 1rem 4%; }
+            nav ul { gap: 1rem; flex-wrap: wrap; }
+            .hero { height: auto; padding: 9rem 0 4rem; }
+            .hero-content { text-align: left; }
+            .grid-3 { grid-template-columns: 1fr; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+            .points { grid-template-columns: 1fr; }
+            .contact-box { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div id="intro-overlay">
+        <div class="intro-logo-box">
+            <div class="intro-slideshow"></div>
+            <div class="intro-text">YOSHI MEDIA</div>
+        </div>
+    </div>
+
+    <nav>
+        <div class="logo">YOSHI MEDIA</div>
+        <ul>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#portfolio">Work</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" id="top">
+        <div class="hero-accent-line"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-splash-title">Make your brand <span>clear</span> and the next step <span>obvious</span>.</h1>
+                <div class="hero-name-script">Yoshua Israel-Dugeon</div>
+                <p style="color: rgba(255,255,255,0.8); letter-spacing: 2px; text-transform: uppercase; font-weight: 700;">Websites / Advertising / Photography</p>
+                <div class="hero-actions" style="margin-top: 1.6rem;">
+                    <a class="btn btn-primary" href="#contact">Get a Quote</a>
+                    <a class="btn" href="#portfolio">See Work</a>
+                    <a class="btn" href="#pricing">View Pricing</a>
+                </div>
+                <div class="hero-meta">
+                    <div>Creative plus strategy (no ad spend management)</div>
+                    <div>Clean, high-contrast aesthetic</div>
+                    <div>Built for small business speed</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">Services</div>
+                    <h2>Focused offers. Clean output.</h2>
+                    <p class="sub">Three lanes designed to ship quickly and look premium.</p>
+                </div>
+            </div>
+            <div class="grid-3">
+                <div class="service-card">
+                    <h3>Advertising Campaigns</h3>
+                    <p>Creative plus strategy built to perform: messaging, visuals, and a launch-ready kit.</p>
+                    <div class="tagrow">
+                        <span class="tag">Strategy</span>
+                        <span class="tag">Creative</span>
+                        <span class="tag">Launch Kit</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <h3>Social Media</h3>
+                    <p>A repeatable system: templates, post packs, and direction so you do not stall out.</p>
+                    <div class="tagrow">
+                        <span class="tag">Templates</span>
+                        <span class="tag">Post Packs</span>
+                        <span class="tag">Consistency</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <h3>Photography</h3>
+                    <p>Brand-ready images for websites, campaigns, and socials, clean or moody when it fits.</p>
+                    <div class="tagrow">
+                        <span class="tag">Brand</span>
+                        <span class="tag">Portrait</span>
+                        <span class="tag">Product</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing-section">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">Pricing</div>
+                    <h2>Subscriptions plus one-time</h2>
+                    <p class="sub">Monthly support for momentum or buy a deliverable once and be done.</p>
+                </div>
+            </div>
+            <div class="grid-3">
+                <div class="tier-card">
+                    <div class="tier-top">
+                        <div>
+                            <div class="tier-name">Starter</div>
+                            <div class="tier-desc">Clean presence and monthly creative support.</div>
+                        </div>
+                        <div class="tier-price">$500/mo</div>
+                    </div>
+                    <ul class="tier-list">
+                        <li><span class="check" aria-hidden="true"></span>Monthly content pack (templates or posts)</li>
+                        <li><span class="check" aria-hidden="true"></span>1 strategy call per month</li>
+                        <li><span class="check" aria-hidden="true"></span>Basic brand polish (visual consistency)</li>
+                        <li><span class="check" aria-hidden="true"></span>Email support</li>
+                    </ul>
+                </div>
+
+                <div class="tier-card featured">
+                    <div class="tier-top">
+                        <div>
+                            <div class="badge">Most Popular</div>
+                            <div class="tier-name" style="margin-top: 0.5rem;">Growth</div>
+                            <div class="tier-desc">Campaign creative and social system direction.</div>
+                        </div>
+                        <div class="tier-price">$1,200/mo</div>
+                    </div>
+                    <ul class="tier-list">
+                        <li><span class="check" aria-hidden="true"></span>Campaign creative (ads, visuals, copy)</li>
+                        <li><span class="check" aria-hidden="true"></span>Social content system (templates and plan)</li>
+                        <li><span class="check" aria-hidden="true"></span>Bi-weekly check-ins</li>
+                        <li><span class="check" aria-hidden="true"></span>Priority support</li>
+                    </ul>
+                </div>
+
+                <div class="tier-card">
+                    <div class="tier-top">
+                        <div>
+                            <div class="tier-name">Premium</div>
+                            <div class="tier-desc">Full creative support and frequent working sessions.</div>
+                        </div>
+                        <div class="tier-price">$2,500/mo</div>
+                    </div>
+                    <ul class="tier-list">
+                        <li><span class="check" aria-hidden="true"></span>Multi-campaign creative support</li>
+                        <li><span class="check" aria-hidden="true"></span>Photography included as needed</li>
+                        <li><span class="check" aria-hidden="true"></span>Weekly working sessions</li>
+                        <li><span class="check" aria-hidden="true"></span>Monthly performance summary (creative side)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 3rem;">One-Time Services</h3>
+            <div class="one-time-grid">
+                <div class="one-time-card">
+                    <h4>Campaign Package</h4>
+                    <p>Concept, copy, and visuals delivered as a launch-ready kit.</p>
+                    <p style="margin-top: 0.6rem; font-weight: 900;">$800</p>
+                </div>
+                <div class="one-time-card">
+                    <h4>Photo Shoot</h4>
+                    <p>2-hour session plus edited selects for web and campaigns.</p>
+                    <p style="margin-top: 0.6rem; font-weight: 900;">$400</p>
+                </div>
+                <div class="one-time-card">
+                    <h4>Website Build</h4>
+                    <p>Modern, mobile-first site built to capture leads.</p>
+                    <p style="margin-top: 0.6rem;"><span class="soon">Coming Soon</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">Work</div>
+                    <h2>Selected projects</h2>
+                    <p class="sub">Filter by category. Hover for the pop-out view.</p>
+                </div>
+                <div class="filters" aria-label="Portfolio filters">
+                    <button class="chip active" data-filter="all" type="button">All</button>
+                    <button class="chip" data-filter="campaign" type="button">Campaigns</button>
+                    <button class="chip" data-filter="social" type="button">Social</button>
+                    <button class="chip" data-filter="photo" type="button">Photo</button>
+                    <button class="chip" data-filter="web" type="button">Web</button>
+                </div>
+            </div>
+
+            <div class="portfolio-grid" id="portfolioGrid">
+                <article class="work" data-category="campaign">
+                    <div class="work-top">
+                        <h3>Ally Financial Campaign (Mock)</h3>
+                        <div class="type">Campaign</div>
+                    </div>
+                    <div class="work-media"></div>
+                    <div class="work-detail">
+                        <p>Concept-to-execution mock campaign focused on clarity, brand voice, and clean visual hierarchy.</p>
+                        <div class="mini"><span>Concept</span><span>Copy</span><span>Creative System</span></div>
+                    </div>
+                </article>
+
+                <article class="work" data-category="photo">
+                    <div class="work-top">
+                        <h3>Photography Collection</h3>
+                        <div class="type">Photo</div>
+                    </div>
+                    <div class="work-media"></div>
+                    <div class="work-detail">
+                        <p>Brand-ready images for web, campaigns, and socials. Clean sets with optional moody styles.</p>
+                        <div class="mini"><span>Brand</span><span>Portrait</span><span>Story</span></div>
+                    </div>
+                </article>
+
+                <article class="work" data-category="social">
+                    <div class="work-top">
+                        <h3>Social Content System</h3>
+                        <div class="type">Social</div>
+                    </div>
+                    <div class="work-media"></div>
+                    <div class="work-detail">
+                        <p>Template-driven system designed for consistency. Post packs and a simple plan.</p>
+                        <div class="mini"><span>Templates</span><span>Post Packs</span><span>Plan</span></div>
+                    </div>
+                </article>
+
+                <article class="work" data-category="web">
+                    <div class="work-top">
+                        <h3>Website Build (Placeholder)</h3>
+                        <div class="type">Web</div>
+                    </div>
+                    <div class="work-media"></div>
+                    <div class="work-detail">
+                        <p>Modern, mobile-first layout with clean hierarchy, credibility, and lead capture.</p>
+                        <div class="mini"><span>Mobile-first</span><span>CTA</span><span>Lead Capture</span></div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">About</div>
+                    <h2>Clean creative. Clear strategy.</h2>
+                    <p class="sub">Minimal, high-contrast, built to convert, not just look cool.</p>
+                </div>
+            </div>
+            <div class="about-box">
+                <p>
+                    I am a creative marketer and photographer based in Austin. I help small businesses stand out with clean design,
+                    sharp visuals, and strategy-led creative that makes customers act.
+                </p>
+                <p style="margin-top: 0.8rem;">
+                    My style is monochrome reds plus blacks and greys with a premium neutral touch, clean typography,
+                    strong hierarchy, and layouts that make the next step obvious.
+                </p>
+                <div class="points" aria-label="About highlights">
+                    <div class="point"><strong>Fast clarity</strong>Tight messaging so customers instantly get it.</div>
+                    <div class="point"><strong>Consistency</strong>Your site, ads, and socials look like one brand.</div>
+                    <div class="point"><strong>Deliverables</strong>Real assets you can post, run, and reuse.</div>
+                </div>
+                <div class="about-signature">Yoshua Israel-Dugeon</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-box">
+                <div>
+                    <div class="kicker">Contact</div>
+                    <h2>Get a quote</h2>
+                    <p class="sub">
+                        Fill this out and I will reply with a clean plan and next steps.
+                        If your email client blocks it, the form falls back to a mailto draft.
+                    </p>
+
+                    <div class="contact-info" aria-label="Contact info">
+                        <div class="row"><span>Phone</span><a href="tel:17378025242">737-802-5242</a></div>
+                        <div class="row"><span>Email</span><a href="mailto:yoshua.amikam@gmail.com">yoshua.amikam@gmail.com</a></div>
+                        <div class="row"><span>Website</span><a href="https://yoshuaamikam.wixsite.com/yoshimedia" target="_blank" rel="noopener">yoshuaamikam.wixsite.com/yoshimedia</a></div>
+                        <div class="row"><span>Location</span><div>Austin, TX</div></div>
+                    </div>
+                </div>
+
+                <form id="quoteForm">
+                    <div class="form-row">
+                        <div class="field">
+                            <label for="name">Name</label>
+                            <input id="name" name="name" type="text" placeholder="Your name" required>
+                        </div>
+                        <div class="field">
+                            <label for="business">Business</label>
+                            <input id="business" name="business" type="text" placeholder="Business name">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <input id="email" name="email" type="email" placeholder="you@email.com" required>
+                        </div>
+                        <div class="field">
+                            <label for="service">Service</label>
+                            <select id="service" name="service" required>
+                                <option value="" selected disabled>Select one</option>
+                                <option value="Campaigns">Advertising Campaigns</option>
+                                <option value="Social">Social Media</option>
+                                <option value="Photography">Photography</option>
+                                <option value="Websites (Coming Soon)">Websites (Coming Soon)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="timeline">Timeline</label>
+                        <select id="timeline" name="timeline">
+                            <option value="" selected disabled>Pick a timeline</option>
+                            <option value="ASAP (1-2 weeks)">ASAP (1-2 weeks)</option>
+                            <option value="This month">This month</option>
+                            <option value="Next 30-60 days">Next 30-60 days</option>
+                            <option value="Flexible">Flexible</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="details">Project details</label>
+                        <textarea id="details" name="details" placeholder="What do you do? What are you trying to sell? Any links? What does success look like?"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Send Quote Request</button>
+                    <div class="hint">This creates an email draft to Yoshua with your details.</div>
+                </form>
+            </div>
+
+            <div class="footer">
+                <div class="line">
+                    <div>Copyright <span id="year"></span> Yoshi Media</div>
+                    <div>Monochrome red and black system, one-page scroll</div>
+                </div>
+            </div>
+        </div>
+    </section>
+<script>
+        // Intro overlay
+        window.addEventListener('load', () => {
+            document.body.style.overflowY = 'hidden';
+            setTimeout(() => {
+                const intro = document.getElementById('intro-overlay');
+                intro.style.transition = 'opacity 1s ease, transform 1s cubic-bezier(0.77, 0, 0.175, 1)';
+                intro.style.transform = 'translateY(-100%)';
+                intro.style.opacity = '0';
+                document.body.style.overflowY = 'auto';
+            }, 2500);
+        });
+
+        // Portfolio filter
+        const chips = Array.from(document.querySelectorAll('.chip'));
+        const works = Array.from(document.querySelectorAll('.work'));
+
+        function setActiveChip(btn) {
+            chips.forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function applyFilter(filter) {
+            works.forEach(w => {
+                const cat = w.getAttribute('data-category');
+                const show = (filter === 'all') || (cat === filter);
+                w.classList.toggle('hidden', !show);
+            });
+        }
+
+        chips.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.getAttribute('data-filter');
+                setActiveChip(btn);
+                applyFilter(filter);
+            });
+        });
+
+        // Quote form to mailto draft
+        document.getElementById('quoteForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const business = document.getElementById('business').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const service = document.getElementById('service').value;
+            const timeline = document.getElementById('timeline').value || 'Not specified';
+            const details = document.getElementById('details').value.trim() || 'No extra details provided.';
+
+            const subject = encodeURIComponent(`Yoshi Media Quote Request - ${service}`);
+            const body = encodeURIComponent(
+`Name: ${name}
+Business: ${business || '-'}
+Email: ${email}
+Service: ${service}
+Timeline: ${timeline}
+
+Details:
+${details}
+
+Links (optional):
+-`
+            );
+
+            window.location.href = `mailto:yoshua.amikam@gmail.com?subject=${subject}&body=${body}`;
+        });
+
+        // Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
