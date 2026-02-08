@@ -198,7 +198,7 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 5rem;
-            margin-bottom: 6rem;
+            margin-bottom: 6rem; /* Added margin to separate from the bottom full-width project */
         }
 
         .project-card {
@@ -378,7 +378,7 @@
                 </div>
                 <article class="featured-card">
                     <div class="featured-img">
-                        <img src="Photos/GradphotoKEV.jpg" 
+                        <img src="GradphotoKEV.jpg" 
                              onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200'" 
                              alt="Michigan State Graduation">
                     </div>
@@ -388,7 +388,7 @@
             <div class="gallery">
                 <article class="project-card">
                     <div class="project-img">
-                        <img src="Photos/BuildingDTAustin.jpeg" 
+                        <img src="BuildingDTAustin.jpeg" 
                              onerror="this.src='https://images.unsplash.com/photo-1531315630201-bb152f598884?w=800'" 
                              alt="Austin Skyline">
                     </div>
@@ -401,7 +401,7 @@
 
                 <article class="project-card">
                     <div class="project-img">
-                        <img src="Photos/DMCElevator.png" 
+                        <img src="DMCElevator.png" 
                              onerror="this.src='https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800'" 
                              alt="DMC Marketing">
                     </div>
@@ -421,7 +421,7 @@
                 </div>
                 <article class="featured-card">
                     <div class="featured-img">
-                        <img src="Photos/allycampaign.png" 
+                        <img src="allycampaign.png" 
                              onerror="this.src='https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200'" 
                              alt="Ally Campaign Strategy">
                     </div>
@@ -464,7 +464,9 @@
                         <span class="comp">Arizona Tile — Austin, TX</span>
                         <ul class="desc-list">
                             <li>Managing pipeline and processing over $1M in monthly B2B sales.</li>
-                            <li>Building strategic relationships with fabricators, designers, and builders.</li>
+                            <li>Building strategic relationships with fabricators, designers, contractors, and builders to streamline high-end project specifications.</li>
+                            <li>Collaborating on sales collateral and promotional designs.</li>
+                            <li>Maintaining inventory records and ensuring slab availability.</li>
                         </ul>
                     </div>
                     <div class="resume-item">
@@ -473,6 +475,27 @@
                         <span class="comp">Michigan State University — East Lansing, MI</span>
                         <ul class="desc-list">
                             <li>Managed scheduling and payroll for a team of 30+ students.</li>
+                            <li>Onboarded and trained new members on operational standards.</li>
+                            <li>Oversaw facility logistics for major campus events.</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <span class="date">2016 - 2017</span>
+                        <span class="role">Marketing Intern</span>
+                        <span class="comp">Henry Ford Health Systems — Detroit, MI</span>
+                        <ul class="desc-list">
+                            <li>Produced visual marketing materials and flyers using Adobe Photoshop.</li>
+                            <li>Assisted in event photography and brand management.</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <span class="date">Dec 2016 – Jan 2018, Dec 2022 – May 2023</span>
+                        <span class="role">Customer Service Assistant / Shift Lead</span>
+                        <span class="comp">Walgreens — Detroit, MI & Round Rock, TX</span>
+                        <ul class="desc-list">
+                            <li>Optimized in-store visual merchandising and promotional displays to maximize brand visibility and increase seasonal product sell-through.</li>
+                            <li>Coached team members on targeted sales techniques and loyalty program enrollment, consistently exceeding weekly acquisition KPIs.</li>
+                            <li>Managed daily store operations and inventory logistics, implementing cross-selling strategies to drive revenue in high-margin categories.</li>
                         </ul>
                     </div>
                 </div>
@@ -483,6 +506,7 @@
     <section id="agency" class="teaser-section">
         <div class="container">
             <h2 style="color: white; margin-bottom: 2rem;">Yoshi Media Agency</h2>
+            <p style="max-width: 600px; margin: 0 auto 4rem; color: #999;">A full-service creative collective focusing on high-end visuals and growth-driven advertising strategies.</p>
             <div class="browser-mockup">
                 <div class="browser-header">
                     <div class="browser-dot dot-r"></div>
@@ -499,7 +523,7 @@
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
         
-        // IMPROVED TRIGGER: Fires as soon as HTML is parsed, not waiting for missing photos
+        // FORCED LOAD SCRIPT: This ensures the screen clears even if images fail
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const intro = document.getElementById('intro-overlay');
@@ -507,16 +531,21 @@
                 intro.style.transform = 'translateY(-100%)';
                 intro.style.opacity = '0';
                 
-                // Remove element after animation to prevent it blocking clicks
+                // Completely remove the element so it doesn't block clicks
                 setTimeout(() => intro.remove(), 1200);
-            }, 1000);
+            }, 1000); // 1 second delay
         });
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const targetEl = document.querySelector(this.getAttribute('href'));
-                if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+                const targetId = this.getAttribute('href');
+                if (targetId.startsWith('#')) {
+                    const targetEl = document.querySelector(targetId);
+                    if (targetEl) {
+                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
             });
         });
     </script>
