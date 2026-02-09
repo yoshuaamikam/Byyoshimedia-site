@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yoshua Israel-Dugeon | Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <style>
         /* --- RESET & VARIABLES --- */
         * {
@@ -32,9 +34,21 @@
             overflow-x: hidden;
         }
 
-        img { max-width: 100%; display: block; background-color: #eee; }
-        a { color: inherit; text-decoration: none; transition: 0.3s; }
-        ul { list-style: none; }
+        img {
+            max-width: 100%;
+            display: block;
+            background-color: #eee;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        ul {
+            list-style: none;
+        }
 
         /* --- INTRO OVERLAY --- */
         #intro-overlay {
@@ -71,10 +85,21 @@
         }
 
         @keyframes slideImages {
-            0% { background-color: var(--red); }
-            25% { background-color: var(--black); }
-            50% { background-color: var(--grey); }
-            75% { background-color: var(--red); }
+            0% {
+                background-color: var(--red);
+            }
+
+            25% {
+                background-color: var(--black);
+            }
+
+            50% {
+                background-color: var(--grey);
+            }
+
+            75% {
+                background-color: var(--red);
+            }
         }
 
         .intro-text {
@@ -99,15 +124,36 @@
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .logo { font-size: 1.1rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
-        .logo span { color: var(--red); }
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
 
-        nav ul { display: flex; gap: 2.5rem; }
-        nav a { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--grey); }
-        nav a:hover { color: var(--red); }
+        .logo span {
+            color: var(--red);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--grey);
+        }
+
+        nav a:hover {
+            color: var(--red);
+        }
 
         /* --- HERO --- */
         .hero {
@@ -124,7 +170,10 @@
             letter-spacing: -0.05em;
             margin-bottom: 1.5rem;
         }
-        .hero-name span { color: var(--red); }
+
+        .hero-name span {
+            color: var(--red);
+        }
 
         .hero-roles {
             font-weight: 800;
@@ -136,7 +185,13 @@
             align-items: center;
             gap: 1.5rem;
         }
-        .hero-roles::before { content: ''; width: 50px; height: 3px; background: var(--red); }
+
+        .hero-roles::before {
+            content: '';
+            width: 50px;
+            height: 3px;
+            background: var(--red);
+        }
 
         /* --- CONTAINER --- */
         .container {
@@ -146,7 +201,9 @@
             padding: 0 5%;
         }
 
-        section { padding: 5rem 0; }
+        section {
+            padding: 5rem 0;
+        }
 
         .kicker {
             color: var(--red);
@@ -158,7 +215,13 @@
             display: block;
         }
 
-        h2 { font-size: 3rem; font-weight: 900; text-transform: uppercase; margin-bottom: 3rem; letter-spacing: -0.02em; }
+        h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            letter-spacing: -0.02em;
+        }
 
         /* --- FEATURED PROJECT --- */
         .featured-project {
@@ -171,8 +234,16 @@
             max-width: 900px;
         }
 
-        .featured-header h2 { font-size: 3rem; margin-bottom: 1rem; }
-        .featured-desc { font-size: 1.1rem; color: var(--grey); line-height: 1.6; }
+        .featured-header h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .featured-desc {
+            font-size: 1.1rem;
+            color: var(--grey);
+            line-height: 1.6;
+        }
 
         .featured-card {
             background: var(--white);
@@ -190,15 +261,24 @@
             overflow: hidden;
         }
 
-        .featured-img img { width: 100%; height: 100%; object-fit: cover; transition: 1.5s ease; }
-        .featured-card:hover .featured-img img { transform: scale(1.05); }
+        .featured-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 1.5s ease;
+        }
+
+        .featured-card:hover .featured-img img {
+            transform: scale(1.05);
+        }
 
         /* --- GALLERY GRID --- */
         .gallery {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 5rem;
-            margin-bottom: 6rem; /* Added margin to separate from the bottom full-width project */
+            margin-bottom: 6rem;
+            /* Added margin to separate from the bottom full-width project */
         }
 
         .project-card {
@@ -209,24 +289,62 @@
             overflow: hidden;
         }
 
-        .project-card:hover { transform: translateY(-20px); }
+        .project-card:hover {
+            transform: translateY(-20px);
+        }
 
-        .project-img { aspect-ratio: 4/3; background-color: #ddd; overflow: hidden; }
-        .project-img img { width: 100%; height: 100%; object-fit: cover; transition: 1.5s ease; }
-        .project-card:hover .project-img img { transform: scale(1.08); }
+        .project-img {
+            aspect-ratio: 4/3;
+            background-color: #ddd;
+            overflow: hidden;
+        }
 
-        .project-info { padding: 3rem; }
-        .project-cat { font-size: 0.7rem; font-weight: 900; text-transform: uppercase; color: var(--red); margin-bottom: 0.75rem; letter-spacing: 0.1em; }
-        .project-title { font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem; line-height: 1.1; }
-        .project-desc { font-size: 1rem; color: var(--grey); line-height: 1.7; }
+        .project-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 1.5s ease;
+        }
+
+        .project-card:hover .project-img img {
+            transform: scale(1.08);
+        }
+
+        .project-info {
+            padding: 3rem;
+        }
+
+        .project-cat {
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        .project-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .project-desc {
+            font-size: 1rem;
+            color: var(--grey);
+            line-height: 1.7;
+        }
 
         /* --- RESUME SECTION (SIDEBAR STYLE) --- */
-        .resume-section { background: var(--white); }
-        
-        .resume-grid { 
-            display: grid; 
-            grid-template-columns: 350px 1fr; 
-            gap: 8rem; 
+        .resume-section {
+            background: var(--white);
+        }
+
+        .resume-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 8rem;
         }
 
         .resume-sidebar {
@@ -235,42 +353,81 @@
             height: fit-content;
         }
 
-        .sidebar-item { margin-bottom: 3rem; }
-        .sidebar-label { 
-            font-size: 0.65rem; 
-            font-weight: 900; 
-            text-transform: uppercase; 
-            letter-spacing: 0.3em; 
-            color: var(--red); 
+        .sidebar-item {
+            margin-bottom: 3rem;
+        }
+
+        .sidebar-label {
+            font-size: 0.65rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--red);
             display: block;
             margin-bottom: 1rem;
         }
-        
-        .skill-list { display: flex; flex-wrap: wrap; gap: 0.8rem; }
-        .skill-tag { 
-            font-size: 0.7rem; 
-            font-weight: 700; 
-            background: var(--light-grey); 
-            padding: 0.5rem 1rem; 
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .skill-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            background: var(--light-grey);
+            padding: 0.5rem 1rem;
             border-radius: 2px;
             text-transform: uppercase;
         }
 
         .resume-main {
-            border-left: 1px solid rgba(0,0,0,0.05);
+            border-left: 1px solid rgba(0, 0, 0, 0.05);
             padding-left: 5rem;
         }
 
         .resume-item {
             margin-bottom: 4rem;
             padding-bottom: 2rem;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
-        .role { font-weight: 900; font-size: 1.4rem; display: block; margin-bottom: 0.2rem; }
-        .comp { font-weight: 700; color: var(--grey); font-size: 1rem; margin-bottom: 0.5rem; display: block; }
-        .date { font-weight: 800; text-transform: uppercase; font-size: 0.7rem; color: var(--red); margin-bottom: 1.5rem; display: block; letter-spacing: 0.1em; }
-        .desc-list { font-size: 0.95rem; color: var(--grey); padding-left: 1.2rem; }
-        .desc-list li { margin-bottom: 0.6rem; list-style: disc; }
+
+        .role {
+            font-weight: 900;
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .comp {
+            font-weight: 700;
+            color: var(--grey);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .date {
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            color: var(--red);
+            margin-bottom: 1.5rem;
+            display: block;
+            letter-spacing: 0.1em;
+        }
+
+        .desc-list {
+            font-size: 0.95rem;
+            color: var(--grey);
+            padding-left: 1.2rem;
+        }
+
+        .desc-list li {
+            margin-bottom: 0.6rem;
+            list-style: disc;
+        }
 
         /* --- AGENCY TEASER --- */
         .teaser-section {
@@ -286,7 +443,7 @@
             background: #1a1a1a;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
             border: 1px solid #333;
         }
 
@@ -299,10 +456,23 @@
             gap: 0.8rem;
         }
 
-        .browser-dot { width: 12px; height: 12px; border-radius: 50%; }
-        .dot-r { background: #ff5f56; }
-        .dot-y { background: #ffbd2e; }
-        .dot-g { background: #27c93f; }
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-r {
+            background: #ff5f56;
+        }
+
+        .dot-y {
+            background: #ffbd2e;
+        }
+
+        .dot-g {
+            background: #27c93f;
+        }
 
         .browser-screen {
             aspect-ratio: 16/9;
@@ -319,7 +489,7 @@
             font-weight: 900;
             font-size: 3rem;
             transform: rotate(-5deg);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             color: white;
         }
 
@@ -335,12 +505,124 @@
         }
 
         @media (max-width: 1100px) {
-            .resume-grid { grid-template-columns: 1fr; gap: 3rem; }
-            .resume-main { padding-left: 0; border-left: none; }
-            .resume-sidebar { position: static; }
+            .resume-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .resume-main {
+                padding-left: 0;
+                border-left: none;
+            }
+
+            .resume-sidebar {
+                position: static;
+            }
+        }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 768px) {
+
+            /* Navigation */
+            nav {
+                padding: 1rem 5%;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .logo {
+                font-size: 1rem;
+            }
+
+            /* Hero */
+            .hero {
+                padding: 120px 0 40px 0;
+            }
+
+            .hero-name {
+                font-size: 3.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .hero-roles {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .hero-roles::before {
+                display: none;
+            }
+
+            /* Featured Project */
+            .featured-header h2 {
+                font-size: 2rem;
+            }
+
+            .featured-desc {
+                font-size: 1rem;
+            }
+
+            /* Gallery */
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                margin-bottom: 4rem;
+            }
+
+            /* Resume */
+            .resume-grid {
+                gap: 3rem;
+            }
+
+            .role {
+                font-size: 1.2rem;
+            }
+
+            .comp {
+                font-size: 0.9rem;
+            }
+
+            /* Intro Overlay */
+            .intro-text {
+                font-size: 1.5rem;
+                letter-spacing: 6px;
+                text-align: center;
+            }
+
+            .intro-logo-box {
+                padding: 1rem 2rem;
+            }
+
+            /* General */
+            h2 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            section {
+                padding: 3rem 0;
+            }
+
+            /* Agency Teaser */
+            .teaser-section {
+                padding: 5rem 0;
+            }
+
+            .ribbon {
+                font-size: 2rem;
+                padding: 0.5rem 3rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <div id="intro-overlay">
@@ -369,18 +651,19 @@
 
     <section id="work">
         <div class="container">
-            
+
             <div class="featured-project">
                 <div class="featured-header">
                     <span class="kicker">Featured Photography</span>
                     <h2>Spartan Stories</h2>
-                    <p class="featured-desc">Captured moments of achievement and story-telling. A series documenting the graduation milestones and architectural beauty of Michigan State University.</p>
+                    <p class="featured-desc">Captured moments of achievement and story-telling. A series documenting the
+                        graduation milestones and architectural beauty of Michigan State University.</p>
                 </div>
                 <article class="featured-card">
                     <div class="featured-img">
-                        <img src="GradphotoKEV.jpg" 
-                             onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200'" 
-                             alt="Michigan State Graduation">
+                        <img src="GradphotoKEV.jpg"
+                            onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200'"
+                            alt="Michigan State Graduation">
                     </div>
                 </article>
             </div>
@@ -388,9 +671,9 @@
             <div class="gallery">
                 <article class="project-card">
                     <div class="project-img">
-                        <img src="BuildingDTAustin.jpeg" 
-                             onerror="this.src='https://images.unsplash.com/photo-1531315630201-bb152f598884?w=800'" 
-                             alt="Austin Skyline">
+                        <img src="BuildingDTAustin.jpeg"
+                            onerror="this.src='https://images.unsplash.com/photo-1531315630201-bb152f598884?w=800'"
+                            alt="Austin Skyline">
                     </div>
                     <div class="project-info">
                         <div class="project-cat">Photography</div>
@@ -401,9 +684,9 @@
 
                 <article class="project-card">
                     <div class="project-img">
-                        <img src="DMCElevator.png" 
-                             onerror="this.src='https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800'" 
-                             alt="DMC Marketing">
+                        <img src="DMCElevator.png"
+                            onerror="this.src='https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800'"
+                            alt="DMC Marketing">
                     </div>
                     <div class="project-info">
                         <div class="project-cat">Graphic Design</div>
@@ -417,13 +700,14 @@
                 <div class="featured-header">
                     <span class="kicker">Strategy & Creative</span>
                     <h2>Ally Financial Strategy</h2>
-                    <p class="featured-desc">Digital engagement and brand trust strategy focusing on consumer confidence.</p>
+                    <p class="featured-desc">Digital engagement and brand trust strategy focusing on consumer
+                        confidence.</p>
                 </div>
                 <article class="featured-card">
                     <div class="featured-img">
-                        <img src="allycampaign.png" 
-                             onerror="this.src='https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200'" 
-                             alt="Ally Campaign Strategy">
+                        <img src="allycampaign.png"
+                            onerror="this.src='https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200'"
+                            alt="Ally Campaign Strategy">
                     </div>
                 </article>
             </div>
@@ -435,10 +719,10 @@
         <div class="container">
             <span class="kicker">Experience</span>
             <div class="resume-grid">
-                
+
                 <aside class="resume-sidebar">
                     <h2 style="font-size: 2.2rem; margin-bottom: 2rem;">Professional Journey</h2>
-                    
+
                     <div class="sidebar-item">
                         <span class="sidebar-label">Core Expertise</span>
                         <div class="skill-list">
@@ -464,7 +748,8 @@
                         <span class="comp">Arizona Tile — Austin, TX</span>
                         <ul class="desc-list">
                             <li>Managing pipeline and processing over $1M in monthly B2B sales.</li>
-                            <li>Building strategic relationships with fabricators, designers, contractors, and builders to streamline high-end project specifications.</li>
+                            <li>Building strategic relationships with fabricators, designers, contractors, and builders
+                                to streamline high-end project specifications.</li>
                             <li>Collaborating on sales collateral and promotional designs.</li>
                             <li>Maintaining inventory records and ensuring slab availability.</li>
                         </ul>
@@ -493,9 +778,12 @@
                         <span class="role">Customer Service Assistant / Shift Lead</span>
                         <span class="comp">Walgreens — Detroit, MI & Round Rock, TX</span>
                         <ul class="desc-list">
-                            <li>Optimized in-store visual merchandising and promotional displays to maximize brand visibility and increase seasonal product sell-through.</li>
-                            <li>Coached team members on targeted sales techniques and loyalty program enrollment, consistently exceeding weekly acquisition KPIs.</li>
-                            <li>Managed daily store operations and inventory logistics, implementing cross-selling strategies to drive revenue in high-margin categories.</li>
+                            <li>Optimized in-store visual merchandising and promotional displays to maximize brand
+                                visibility and increase seasonal product sell-through.</li>
+                            <li>Coached team members on targeted sales techniques and loyalty program enrollment,
+                                consistently exceeding weekly acquisition KPIs.</li>
+                            <li>Managed daily store operations and inventory logistics, implementing cross-selling
+                                strategies to drive revenue in high-margin categories.</li>
                         </ul>
                     </div>
                 </div>
@@ -506,14 +794,17 @@
     <section id="agency" class="teaser-section">
         <div class="container">
             <h2 style="color: white; margin-bottom: 2rem;">Yoshi Media Agency</h2>
-            <p style="max-width: 600px; margin: 0 auto 4rem; color: #999;">A full-service creative collective focusing on high-end visuals and growth-driven advertising strategies.</p>
+            <p style="max-width: 600px; margin: 0 auto 4rem; color: #999;">A full-service creative collective focusing
+                on high-end visuals and growth-driven advertising strategies.</p>
             <div class="browser-mockup">
                 <div class="browser-header">
                     <div class="browser-dot dot-r"></div>
                     <div class="browser-dot dot-y"></div>
                     <div class="browser-dot dot-g"></div>
                 </div>
-                <div class="browser-screen"><div class="ribbon">COMING SOON</div></div>
+                <div class="browser-screen">
+                    <div class="ribbon">COMING SOON</div>
+                </div>
             </div>
         </div>
     </section>
@@ -522,7 +813,7 @@
 
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
-        
+
         // FORCED LOAD SCRIPT: This ensures the screen clears even if images fail
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
@@ -530,7 +821,7 @@
                 intro.style.transition = 'opacity 1s ease, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1)';
                 intro.style.transform = 'translateY(-100%)';
                 intro.style.opacity = '0';
-                
+
                 // Completely remove the element so it doesn't block clicks
                 setTimeout(() => intro.remove(), 1200);
             }, 1000); // 1 second delay
@@ -550,4 +841,5 @@
         });
     </script>
 </body>
+
 </html>
