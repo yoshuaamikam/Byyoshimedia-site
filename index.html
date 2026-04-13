@@ -1,444 +1,836 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+<!DOCTYPE html>
+<html lang="en">
 
-import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Camera, 
-  Menu, 
-  X,
-  Megaphone,
-  Instagram,
-  CreditCard,
-  ChevronLeft,
-  ChevronRight,
-  Loader2
-} from "lucide-react";
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoshua Israel-Dugeon | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        /* --- RESET & VARIABLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-// Replace with your actual Gemini API key if hosting outside the preview environment
-const apiKey = "";
+        :root {
+            --red: #c8252e;
+            --black: #0a0a0a;
+            --card-bg: #161616;
+            --grey: #888888;
+            --white: #ffffff;
+            --shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+        }
 
-const IMAGE_PROMPTS = [
-  // Austin, TX
-  { 
-    id: 1, 
-    city: "Austin, TX", 
-    title: "Austin Skyline", 
-    prompt: "Modern professional 8k color photography of the Austin Texas skyline at sunset. Sharp glass skyscrapers, clear reflections on the river, mirrorless camera quality, ultra-high definition urban landscape." 
-  },
-  { 
-    id: 2, 
-    city: "Austin, TX", 
-    title: "Congress Avenue", 
-    prompt: "High-resolution color street photography of Congress Avenue in Austin Texas, looking towards the State Capitol. Vibrant modern urban life, sharp focus, 2024 aesthetic, professional architectural shot." 
-  },
-  { 
-    id: 3, 
-    city: "Austin, TX", 
-    title: "Austin Modernity", 
-    prompt: "Modern architectural detail of glass and steel buildings in downtown Austin. Blue hour lighting, sharp minimalist lines, professional digital photography, high-end commercial aesthetic." 
-  },
-  // Detroit, MI
-  { 
-    id: 4, 
-    city: "Detroit, MI", 
-    title: "Renaissance Center", 
-    prompt: "The General Motors Renaissance Center in Detroit from the riverfront. Bright morning light, shimmering blue water, crisp modern glass towers, professional travel photography, ultra-clear 8k." 
-  },
-  { 
-    id: 5, 
-    city: "Detroit, MI", 
-    title: "Detroit Industrial", 
-    prompt: "Clean, modern color photograph of renovated industrial architecture in Detroit. High-end loft style, red brick with black steel, sharp focus, professional urban development photography." 
-  },
-  { 
-    id: 6, 
-    city: "Detroit, MI", 
-    title: "Historic Streets", 
-    prompt: "Modern view of Woodward Avenue in Detroit. Vibrant city life, historic buildings with modern storefronts, sharp digital photography, bright daylight, 2024 urban energy." 
-  },
-  // East Lansing, MI
-  { 
-    id: 7, 
-    city: "East Lansing, MI", 
-    title: "Spartan Stadium", 
-    prompt: "Cinematic wide-angle view of Spartan Stadium at Michigan State University. Lush green turf, modern scoreboard, professional sports stadium photography, bright clear sky, ultra-high resolution." 
-  },
-  { 
-    id: 8, 
-    city: "East Lansing, MI", 
-    title: "MSU Campus", 
-    prompt: "Modern campus scenery at Michigan State University. Red Cedar River with vibrant trees and collegiate gothic buildings, sharp professional landscape photography, high-end academic aesthetic." 
-  },
-  { 
-    id: 9, 
-    city: "East Lansing, MI", 
-    title: "Beaumont Tower", 
-    prompt: "The iconic Beaumont Tower at Michigan State University. Bright spring landscape, sharp architectural detail, professional digital photography, high resolution, clear blue sky." 
-  }
-];
+        html {
+            scroll-behavior: smooth;
+        }
 
-export default function App() {
-  const [showOverlay, setShowOverlay] = React.useState(true);
-  const [currentSlide, setCurrentSlide] = React.useState(0);
-  const [generatedImages, setGeneratedImages] = React.useState({});
-  const [isGenerating, setIsGenerating] = React.useState(true);
-  const [error, setError] = React.useState(null);
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-  // Helper for API retries with exponential backoff
-  const fetchWithRetry = async (prompt, retries = 5, delay = 1000) => {
-    try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseModalities: ["IMAGE"] }
-        })
-      });
+        img {
+            max-width: 100%;
+            display: block;
+            background-color: #111;
+        }
 
-      if (!response.ok) throw new Error("Failed to generate");
-      
-      const result = await response.json();
-      const base64 = result.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
-      
-      if (!base64) throw new Error("No image data in response");
-      return `data:image/png;base64,${base64}`;
-    } catch (err) {
-      if (retries > 0) {
-        await new Promise(resolve => setTimeout(resolve, delay));
-        return fetchWithRetry(prompt, retries - 1, delay * 2);
-      }
-      throw err;
-    }
-  };
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: 0.3s;
+        }
 
-  // Generate all images on mount
-  React.useEffect(() => {
-    const generateAll = async () => {
-      setIsGenerating(true);
-      try {
-        const imagePromises = IMAGE_PROMPTS.map(async (item) => {
-          const url = await fetchWithRetry(item.prompt);
-          setGeneratedImages(prev => ({ ...prev, [item.id]: url }));
-          return { id: item.id, url };
-        });
+        ul {
+            list-style: none;
+        }
 
-        await Promise.all(imagePromises);
-      } catch (err) {
-        setError("Issue rendering photography. Please refresh to reload.");
-      } finally {
-        setIsGenerating(false);
-      }
-    };
+        /* --- INTRO OVERLAY --- */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--black);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
 
-    generateAll();
-  }, []);
+        .intro-logo-box {
+            position: relative;
+            padding: 1.5rem 3rem;
+            border: 4px solid var(--white);
+            background: transparent;
+            overflow: hidden;
+        }
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowOverlay(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
+        .intro-slideshow-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            animation: slideColors 2.5s infinite;
+            opacity: 0.7;
+            z-index: 1;
+        }
 
-  // Auto-slideshow logic
-  React.useEffect(() => {
-    if (isGenerating) return;
-    
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % IMAGE_PROMPTS.length);
-    }, 6000);
-    
-    return () => clearInterval(interval);
-  }, [isGenerating, generatedImages]);
+        @keyframes slideColors {
+            0% { background-color: var(--red); }
+            33% { background-color: var(--black); }
+            66% { background-color: #333; }
+            100% { background-color: var(--red); }
+        }
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % IMAGE_PROMPTS.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + IMAGE_PROMPTS.length) % IMAGE_PROMPTS.length);
+        .intro-text {
+            position: relative;
+            font-weight: 900;
+            font-size: 2.5rem;
+            color: var(--white);
+            letter-spacing: 12px;
+            z-index: 2;
+            text-transform: uppercase;
+        }
 
-  return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white font-['Montserrat',sans-serif] selection:bg-[#c8252e] selection:text-white overflow-x-hidden">
-      {/* Intro Overlay */}
-      <AnimatePresence>
-        {showOverlay && (
-          <motion.div 
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0, y: "-100%" }}
-            transition={{ duration: 1, ease: [0.77, 0, 0.175, 1] }}
-            className="fixed inset-0 z-[9999] bg-[#1a1a1a] flex items-center justify-center pointer-events-none"
-          >
-            <div className="relative px-12 py-6 border-4 border-white overflow-hidden">
-              <motion.div 
-                animate={{ 
-                  backgroundColor: ["#c8252e", "#1a1a1a", "#3a3a3a", "#c8252e"] 
-                }}
-                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 opacity-70 z-0"
-              />
-              <span className="relative z-10 font-black text-2xl md:text-4xl tracking-[12px] uppercase">YOSHI MEDIA</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-[1000] bg-black/50 backdrop-blur-xl border-b border-white/5 px-[5%] py-5 flex justify-between items-center">
-        <div className="text-lg font-black tracking-wider uppercase">
-          Yoshua<span className="text-[#c8252e]">.</span>
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--red);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        nav a:hover {
+            color: var(--red);
+        }
+
+        /* --- HERO BIG SPLASH --- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .hero-slideshow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            transform: scale(1.1);
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 2;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-name {
+            font-size: clamp(3.5rem, 10vw, 7.5rem);
+            font-weight: 900;
+            line-height: 0.8;
+            text-transform: uppercase;
+            color: var(--white);
+            letter-spacing: -0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-name span {
+            color: var(--red);
+        }
+
+        .hero-roles {
+            font-weight: 800;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .hero-roles::before {
+            content: '';
+            width: 50px;
+            height: 3px;
+            background: var(--red);
+        }
+
+        .hero-controls {
+            position: absolute;
+            bottom: 40px;
+            right: 5%;
+            z-index: 10;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        .control-btn:hover {
+            background: var(--red);
+            border-color: var(--red);
+        }
+
+        /* --- SECTIONS --- */
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        section {
+            padding: 8rem 0;
+        }
+
+        .kicker {
+            color: var(--red);
+            font-weight: 900;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            letter-spacing: -0.02em;
+        }
+
+        /* --- PROJECTS --- */
+        .featured-project {
+            width: 100%;
+            margin-bottom: 8rem;
+        }
+
+        .featured-header {
+            margin-bottom: 3rem;
+            max-width: 900px;
+        }
+
+        .featured-desc {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        .featured-card {
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .featured-img {
+            width: 100%;
+            aspect-ratio: 21/9;
+            overflow: hidden;
+            background-color: #111;
+        }
+
+        .featured-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 1.5s ease;
+        }
+
+        .featured-card:hover .featured-img img {
+            transform: scale(1.05);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5rem;
+            margin-bottom: 8rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            transition: 0.6s transform cubic-bezier(0.165, 0.84, 0.44, 1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-15px);
+        }
+
+        .project-img {
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            background-color: #111;
+        }
+
+        .project-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 1.5s ease;
+        }
+
+        .project-info {
+            padding: 3rem;
+        }
+
+        .project-cat {
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        .project-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .project-desc {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* --- RESUME SECTION STICKY --- */
+        .resume-section {
+            background: #0f0f0f;
+        }
+
+        .resume-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 8rem;
+        }
+
+        .resume-sidebar {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .sidebar-item {
+            margin-bottom: 3rem;
+        }
+
+        .sidebar-label {
+            font-size: 0.65rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--red);
+            display: block;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .skill-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.6rem 1.2rem;
+            border-radius: 2px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .resume-main {
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            padding-left: 5rem;
+        }
+
+        .resume-item {
+            margin-bottom: 4rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .role {
+            font-weight: 900;
+            font-size: 1.6rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .comp {
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .date {
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            color: var(--red);
+            margin-bottom: 2rem;
+            display: block;
+            letter-spacing: 0.1em;
+        }
+
+        .desc-list li {
+            margin-bottom: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+            list-style: disc;
+            margin-left: 1.2rem;
+        }
+
+        /* --- AGENCY --- */
+        .teaser-section {
+            background: var(--black);
+            padding: 12rem 0;
+            text-align: center;
+        }
+
+        .browser-mockup {
+            max-width: 1000px;
+            margin: 5rem auto 0;
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+        }
+
+        .browser-header {
+            height: 45px;
+            background: #252525;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            gap: 0.8rem;
+        }
+
+        .browser-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-r { background: #ff5f56; }
+        .dot-y { background: #ffbd2e; }
+        .dot-g { background: #27c93f; }
+
+        .browser-screen {
+            aspect-ratio: 16/9;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .ribbon {
+            background: var(--red);
+            padding: 1.2rem 6rem;
+            font-weight: 900;
+            font-size: 3.5rem;
+            transform: rotate(-5deg);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            color: white;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 8rem 5%;
+            text-align: center;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            color: #444;
+            background: #000;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1100px) {
+            .resume-grid { grid-template-columns: 1fr; gap: 4rem; }
+            .resume-main { padding-left: 0; border-left: none; }
+            .resume-sidebar { position: static; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-name { font-size: 3.5rem; }
+            h2 { font-size: 2.5rem; }
+            .gallery { grid-template-columns: 1fr; gap: 3rem; }
+            nav ul { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="intro-overlay">
+        <div class="intro-logo-box">
+            <div class="intro-slideshow-bg"></div>
+            <div class="intro-text">YOSHI MEDIA</div>
         </div>
-        <ul className="hidden md:flex gap-10">
-          <li><a href="#work" className="text-[0.75rem] font-bold uppercase tracking-[0.15em] text-white/60 hover:text-[#c8252e] transition-colors">Work</a></li>
-          <li><a href="#resume" className="text-[0.75rem] font-bold uppercase tracking-[0.15em] text-white/60 hover:text-[#c8252e] transition-colors">Resume</a></li>
-          <li><a href="#about" className="text-[0.75rem] font-bold uppercase tracking-[0.15em] text-white/60 hover:text-[#c8252e] transition-colors">About</a></li>
-          <li><a href="#agency" className="text-[0.75rem] font-bold uppercase tracking-[0.15em] text-[#c8252e] hover:text-white transition-colors">Agency</a></li>
+    </div>
+
+    <nav>
+        <div class="logo">Yoshua<span>.</span></div>
+        <ul>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#resume">Resume</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#agency" style="color: var(--red);">Agency</a></li>
         </ul>
-      </nav>
+    </nav>
 
-      {/* Hero Slideshow */}
-      <header className="relative h-screen w-full overflow-hidden bg-[#0a0a0a]">
-        {error && (
-          <div className="absolute inset-0 z-[40] flex items-center justify-center px-10 text-center">
-            <p className="text-white/40 font-bold uppercase tracking-widest text-sm">{error}</p>
-          </div>
-        )}
-
-        <AnimatePresence mode="wait">
-          {generatedImages[IMAGE_PROMPTS[currentSlide].id] ? (
-            <motion.div
-              key={currentSlide}
-              initial={{ opacity: 0, scale: 1.1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.5 }}
-              className="absolute inset-0"
-            >
-              <div className="absolute inset-0 bg-black/60 z-10" />
-              <img 
-                src={generatedImages[IMAGE_PROMPTS[currentSlide].id]} 
-                alt={IMAGE_PROMPTS[currentSlide].title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute top-32 right-[5%] z-30 text-right">
-                <span className="text-xs font-bold uppercase tracking-widest text-white/80">{IMAGE_PROMPTS[currentSlide].title}</span>
-                <div className="text-[0.6rem] text-white/40 mt-1 italic tracking-widest uppercase">{IMAGE_PROMPTS[currentSlide].city}</div>
-              </div>
-            </motion.div>
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex flex-col items-center gap-4">
-                <Loader2 className="w-8 h-8 text-[#c8252e] animate-spin" />
-                <span className="text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/20">Loading Content...</span>
-              </div>
-            </div>
-          )}
-        </AnimatePresence>
-
-        <div className="absolute inset-0 z-20 flex flex-col justify-center px-[5%]">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-          >
-            <h1 className="text-[clamp(3.5rem,10vw,7.5rem)] font-black leading-[0.8] uppercase tracking-tighter mb-6">
-              Yoshua<br />Israel-<span className="text-[#c8252e]">Dugeon</span>
-            </h1>
-            <div className="flex items-center gap-6 font-extrabold tracking-[0.25em] uppercase text-[0.7rem] text-white/60">
-              <div className="w-[50px] h-[3px] bg-[#c8252e]" />
-              Photographer &nbsp;/&nbsp; Advertiser &nbsp;/&nbsp; Strategist
-            </div>
-          </motion.div>
+    <header class="hero">
+        <div class="hero-slideshow-container" id="hero-slides"></div>
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <h1 class="hero-name">Yoshua<br>Israel-<span>Dugeon</span></h1>
+            <div class="hero-roles">Photographer &nbsp;/&nbsp; Advertiser &nbsp;/&nbsp; Strategist</div>
         </div>
-
-        <div className="absolute bottom-10 right-[5%] z-30 flex gap-4">
-          <button onClick={prevSlide} className="p-4 bg-white/10 hover:bg-[#c8252e] transition-colors rounded-full border border-white/10 backdrop-blur-sm">
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button onClick={nextSlide} className="p-4 bg-white/10 hover:bg-[#c8252e] transition-colors rounded-full border border-white/10 backdrop-blur-sm">
-            <ChevronRight className="w-6 h-6" />
-          </button>
+        <div class="hero-controls">
+            <button class="control-btn" id="prev-slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button class="control-btn" id="next-slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
         </div>
-      </header>
+    </header>
 
-      {/* Work Section */}
-      <section id="work" className="py-20">
-        <div className="max-w-[1300px] mx-auto px-[5%]">
-          <div className="mb-24">
-            <div className="mb-8 max-w-[900px]">
-              <span className="text-[#c8252e] font-black tracking-[0.4em] uppercase text-[0.65rem] block mb-4">Featured Photography</span>
-              <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-4">Spartan Stories</h2>
-              <p className="text-lg text-white/60 leading-relaxed">Captured moments of achievement and story-telling. A series documenting the graduation milestones and architectural beauty of Michigan State University.</p>
-            </div>
-            <div className="relative aspect-[21/9] rounded-sm overflow-hidden bg-[#1a1a1a] shadow-2xl group">
-              <img 
-                src={generatedImages[7] || "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200"} 
-                alt="Spartan Stories"
-                className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105"
-              />
-            </div>
-          </div>
+    <section id="work">
+        <div class="container">
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-24">
-            <article className="group">
-              <div className="aspect-[4/3] rounded-sm overflow-hidden bg-[#1a1a1a] shadow-2xl mb-12">
-                <img 
-                  src={generatedImages[1] || "https://images.unsplash.com/photo-1531315630201-bb152f598884?w=800"} 
-                  alt="Austin Series"
-                  className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105"
-                />
-              </div>
-              <div className="px-4">
-                <div className="text-[0.7rem] font-black uppercase text-[#c8252e] tracking-widest mb-3">Photography</div>
-                <h3 className="text-3xl font-black mb-4 leading-none">Austin Series</h3>
-                <p className="text-white/60">Architectural exploration of downtown Austin.</p>
-              </div>
-            </article>
-
-            <article className="group">
-              <div className="aspect-[4/3] rounded-sm overflow-hidden bg-[#1a1a1a] shadow-2xl mb-12">
-                <img 
-                  src={generatedImages[6] || "https://images.unsplash.com/photo-1505751172107-57396ca907b7?w=800"} 
-                  alt="Public Health Outreach"
-                  className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105"
-                />
-              </div>
-              <div className="px-4">
-                <div className="text-[0.7rem] font-black uppercase text-[#c8252e] tracking-widest mb-3">Graphic Design</div>
-                <h3 className="text-3xl font-black mb-4 leading-none">Public Health Outreach</h3>
-                <p className="text-white/60">Visual communication for Detroit Receiving Hospital.</p>
-              </div>
-            </article>
-          </div>
-
-          <div className="mb-0">
-            <div className="mb-8 max-w-[900px]">
-              <span className="text-[#c8252e] font-black tracking-[0.4em] uppercase text-[0.65rem] block mb-4">Strategy & Creative</span>
-              <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-4">Ally Financial Strategy</h2>
-              <p className="text-lg text-white/60 leading-relaxed">Digital engagement and brand trust strategy focusing on consumer confidence.</p>
-            </div>
-            <div className="relative aspect-[21/9] rounded-sm overflow-hidden bg-[#1a1a1a] shadow-2xl group">
-              <img 
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200" 
-                alt="Ally Financial Strategy"
-                className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Resume Section */}
-      <section id="resume" className="py-20 bg-[#1a1a1a]">
-        <div className="max-w-[1300px] mx-auto px-[5%]">
-          <span className="text-[#c8252e] font-black tracking-[0.4em] uppercase text-[0.65rem] block mb-4">Experience</span>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-[350px,1fr] gap-20 lg:gap-32 items-start relative">
-            {/* Sticky Sidebar */}
-            <aside className="lg:sticky lg:top-[120px] self-start">
-              <h2 className="text-4xl font-black uppercase tracking-tighter mb-8">Professional Journey</h2>
-              <div className="mb-12">
-                <span className="text-[#c8252e] font-black tracking-[0.3em] uppercase text-[0.65rem] block mb-4">Core Expertise</span>
-                <div className="flex flex-wrap gap-3">
-                  {["Microsoft Suite", "Media Strategy", "Brand ID", "Ops Management", "Advertising"].map(skill => (
-                    <span key={skill} className="text-[0.7rem] font-bold bg-[#0a0a0a] px-4 py-2 rounded-sm uppercase border border-white/5">{skill}</span>
-                  ))}
+            <div class="featured-project">
+                <div class="featured-header">
+                    <span class="kicker">Featured Photography</span>
+                    <h2>Spartan Stories</h2>
+                    <p class="featured-desc">Captured moments of achievement and story-telling. A series documenting the graduation milestones and architectural beauty of Michigan State University.</p>
                 </div>
-              </div>
-              <div>
-                <span className="text-[#c8252e] font-black tracking-[0.3em] uppercase text-[0.65rem] block mb-4">Education</span>
-                <p className="font-bold text-[0.9rem] mb-1 text-white">Michigan State University</p>
-                <p className="text-white/40 text-[0.8rem]">B.A. Advertising Management</p>
-              </div>
-            </aside>
-
-            {/* Scrollable Job History */}
-            <div className="border-l border-white/5 pl-0 lg:pl-20">
-              <ResumeItem 
-                date="May 2023 - Present"
-                role="Order Desk CSR / Interim Slab Lead"
-                company="Arizona Tile — Austin, TX"
-                points={[
-                  "Managing pipeline and processing over $1M in monthly B2B sales.",
-                  "Building strategic relationships with fabricators, designers, contractors, and builders to streamline high-end project specifications.",
-                  "Collaborating on sales collateral and promotional designs.",
-                  "Maintaining inventory records and ensuring slab availability."
-                ]}
-              />
-              <ResumeItem 
-                date="Jan 2019 - Jul 2022"
-                role="Facilities Supervisor"
-                company="Michigan State University — East Lansing, MI"
-                points={[
-                  "Managed scheduling and payroll for a team of 30+ students.",
-                  "Onboarded and trained new members on operational standards.",
-                  "Oversaw facility logistics for major campus events."
-                ]}
-              />
-              <ResumeItem 
-                date="2016 - 2017"
-                role="Marketing Intern"
-                company="Henry Ford Health Systems — Detroit, MI"
-                points={[
-                  "Produced visual marketing materials and flyers using Adobe Photoshop.",
-                  "Assisted in event photography and brand management."
-                ]}
-              />
-              <ResumeItem 
-                date="Dec 2016 – Jan 2018, Dec 2022 – May 2023"
-                role="Customer Service Assistant / Shift Lead"
-                company="Walgreens — Detroit, MI & Round Rock, TX"
-                points={[
-                  "Optimized in-store visual merchandising and promotional displays to maximize brand visibility and increase seasonal product sell-through.",
-                  "Coached team members on targeted sales techniques and loyalty program enrollment, consistently exceeding weekly acquisition KPIs.",
-                  "Managed daily store operations and inventory logistics, implementing cross-selling strategies to drive revenue in high-margin categories."
-                ]}
-              />
+                <article class="featured-card">
+                    <div class="featured-img">
+                        <img id="feat-img-1" src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200" alt="Michigan State Graduation">
+                    </div>
+                </article>
             </div>
-          </div>
+
+            <div class="gallery">
+                <article class="project-card">
+                    <div class="project-img">
+                        <img id="proj-img-1" src="https://images.unsplash.com/photo-1531315630201-bb152f598884?w=800" alt="Austin Skyline">
+                    </div>
+                    <div class="project-info">
+                        <div class="project-cat">Photography</div>
+                        <h3 class="project-title">Austin Series</h3>
+                        <p class="project-desc">Architectural exploration of downtown Austin.</p>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-img">
+                        <img id="proj-img-2" src="https://images.unsplash.com/photo-1515511856280-7b23f68d2996?w=800" alt="Detroit Historic Streets">
+                    </div>
+                    <div class="project-info">
+                        <div class="project-cat">Graphic Design</div>
+                        <h3 class="project-title">Public Health Outreach</h3>
+                        <p class="project-desc">Visual communication for Detroit Receiving Hospital.</p>
+                    </div>
+                </article>
+            </div>
+
+            <div class="featured-project" style="margin-bottom: 0;">
+                <div class="featured-header">
+                    <span class="kicker">Strategy & Creative</span>
+                    <h2>Ally Financial Strategy</h2>
+                    <p class="featured-desc">Digital engagement and brand trust strategy focusing on consumer confidence.</p>
+                </div>
+                <article class="featured-card">
+                    <div class="featured-img">
+                        <img id="feat-img-2" src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200" alt="Ally Campaign Strategy">
+                    </div>
+                </article>
+            </div>
+
         </div>
-      </section>
+    </section>
 
-      {/* Agency Section */}
-      <section id="agency" className="py-40 bg-black text-center">
-        <div className="max-w-[1300px] mx-auto px-[5%]">
-          <h2 className="text-4xl md:text-5xl font-black uppercase mb-8">Yoshi Media Agency</h2>
-          <p className="max-w-[600px] mx-auto mb-16 text-white/40">A full-service creative collective focusing on high-end visuals and growth-driven advertising strategies.</p>
-          
-          <div className="max-w-[1000px] mx-auto bg-[#1a1a1a] rounded-xl overflow-hidden shadow-2xl border border-white/5">
-            <div className="h-[45px] bg-[#252525] flex items-center px-6 gap-3">
-              <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
-              <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
-              <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
+    <section id="resume" class="resume-section">
+        <div class="container">
+            <span class="kicker">Experience</span>
+            <div class="resume-grid">
+
+                <aside class="resume-sidebar">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 2rem;">Professional Journey</h2>
+
+                    <div class="sidebar-item">
+                        <span class="sidebar-label">Core Expertise</span>
+                        <div class="skill-list">
+                            <span class="skill-tag">Microsoft Suite</span>
+                            <span class="skill-tag">Media Strategy</span>
+                            <span class="skill-tag">Brand ID</span>
+                            <span class="skill-tag">Ops Management</span>
+                            <span class="skill-tag">Advertising</span>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-item">
+                        <span class="sidebar-label">Education</span>
+                        <p style="font-weight: 700; font-size: 1rem;">Michigan State University</p>
+                        <p style="color: rgba(255, 255, 255, 0.4); font-size: 0.9rem;">B.A. Advertising Management</p>
+                    </div>
+                </aside>
+
+                <div class="resume-main">
+                    <div class="resume-item">
+                        <span class="date">May 2023 - Present</span>
+                        <span class="role">Order Desk CSR / Interim Slab Lead</span>
+                        <span class="comp">Arizona Tile — Austin, TX</span>
+                        <ul class="desc-list">
+                            <li>Managing pipeline and processing over $1M in monthly B2B sales.</li>
+                            <li>Building strategic relationships with fabricators, designers, contractors, and builders to streamline high-end project specifications.</li>
+                            <li>Collaborating on sales collateral and promotional designs.</li>
+                            <li>Maintaining inventory records and ensuring slab availability.</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <span class="date">Jan 2019 - Jul 2022</span>
+                        <span class="role">Facilities Supervisor</span>
+                        <span class="comp">Michigan State University — East Lansing, MI</span>
+                        <ul class="desc-list">
+                            <li>Managed scheduling and payroll for a team of 30+ students.</li>
+                            <li>Onboarded and trained new members on operational standards.</li>
+                            <li>Oversaw facility logistics for major campus events.</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <span class="date">2016 - 2017</span>
+                        <span class="role">Marketing Intern</span>
+                        <span class="comp">Henry Ford Health Systems — Detroit, MI</span>
+                        <ul class="desc-list">
+                            <li>Produced visual marketing materials and flyers using Adobe Photoshop.</li>
+                            <li>Assisted in event photography and brand management.</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <span class="date">Dec 2016 – Jan 2018, Dec 2022 – May 2023</span>
+                        <span class="role">Customer Service Assistant / Shift Lead</span>
+                        <span class="comp">Walgreens — Detroit, MI & Round Rock, TX</span>
+                        <ul class="desc-list">
+                            <li>Optimized in-store visual merchandising and promotional displays to maximize brand visibility and increase seasonal product sell-through.</li>
+                            <li>Coached team members on targeted sales techniques and loyalty program enrollment, consistently exceeding weekly acquisition KPIs.</li>
+                            <li>Managed daily store operations and inventory logistics, implementing cross-selling strategies to drive revenue in high-margin categories.</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div className="aspect-video bg-[#0a0a0a] flex items-center justify-center relative overflow-hidden">
-               <img 
-                src={generatedImages[4] || ""} 
-                className="absolute inset-0 w-full h-full object-cover opacity-20 grayscale"
-                alt="Detroit Background"
-              />
-              <div className="relative z-10 bg-[#c8252e] px-20 py-4 font-black text-3xl md:text-5xl -rotate-[5deg] shadow-2xl">COMING SOON</div>
-            </div>
-          </div>
         </div>
-      </section>
+    </section>
 
-      <footer className="py-24 px-[5%] bg-black text-center text-[0.75rem] font-bold uppercase tracking-[0.3em] text-white/20">
-        &copy; {new Date().getFullYear()} YOSHUA ISRAEL-DUGEON. ALL RIGHTS RESERVED.
-      </footer>
-    </div>
-  );
-}
+    <section id="agency" class="teaser-section">
+        <div class="container">
+            <h2 style="color: white; margin-bottom: 2rem;">Yoshi Media Agency</h2>
+            <p style="max-width: 600px; margin: 0 auto 4rem; color: rgba(255, 255, 255, 0.4);">A full-service creative collective focusing on high-end visuals and growth-driven advertising strategies.</p>
+            <div class="browser-mockup">
+                <div class="browser-header">
+                    <div class="browser-dot dot-r"></div>
+                    <div class="browser-dot dot-y"></div>
+                    <div class="browser-dot dot-g"></div>
+                </div>
+                <div class="browser-screen">
+                    <div class="ribbon">COMING SOON</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-function ResumeItem({ date, role, company, points }) {
-  return (
-    <div className="mb-16 pb-8 border-b border-white/5 last:border-0">
-      <span className="text-[0.7rem] font-black uppercase text-[#c8252e] tracking-widest block mb-6">{date}</span>
-      <span className="text-2xl font-black block mb-1">{role}</span>
-      <span className="text-lg font-bold text-white/60 block mb-6">{company}</span>
-      <ul className="list-disc pl-5 space-y-3 text-white/60">
-        {points.map((point, i) => <li key={i}>{point}</li>)}
-      </ul>
-    </div>
-  );
-}
+    <footer>&copy; <span id="year"></span> YOSHUA ISRAEL-DUGEON. ALL RIGHTS RESERVED.</footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const apiKey = ""; // Auth handled by env
+        const IMAGE_PROMPTS = [
+            { id: 1, prompt: "Modern professional 8k color photography of Austin Texas skyline at sunset. Sharp glass skyscrapers, clear reflections on the river, mirrorless camera quality." },
+            { id: 2, prompt: "High-resolution color street photography of Congress Avenue in Austin Texas towards the Capitol. Vibrant modern urban life, sharp focus, 2024 aesthetic." },
+            { id: 3, prompt: "Modern architectural detail of glass and steel buildings in downtown Austin. Blue hour lighting, sharp minimalist lines, professional digital photography." },
+            { id: 4, prompt: "The General Motors Renaissance Center in Detroit from the riverfront. Bright morning light, shimmering blue water, crisp modern glass towers, 8k professional travel photography." },
+            { id: 5, prompt: "Clean, modern color photograph of renovated industrial architecture in Detroit. High-end loft style, red brick with black steel, sharp focus." },
+            { id: 6, prompt: "Modern view of Woodward Avenue in Detroit. Vibrant city life, historic buildings with modern storefronts, sharp digital photography, 2024 urban energy." },
+            { id: 7, prompt: "Cinematic wide-angle view of Spartan Stadium at Michigan State University. Lush green turf, modern scoreboard, professional sports stadium photography, ultra-high resolution." },
+            { id: 8, prompt: "Modern campus scenery at Michigan State University. Red Cedar River with vibrant trees and collegiate gothic buildings, sharp professional landscape photography." },
+            { id: 9, prompt: "The iconic Beaumont Tower at Michigan State University. Bright spring landscape, sharp architectural detail, professional digital photography, high resolution." }
+        ];
+
+        async function fetchImage(prompt) {
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { responseModalities: ["IMAGE"] }
+                    })
+                });
+                const result = await response.json();
+                const base64 = result.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+                return base64 ? `data:image/png;base64,${base64}` : null;
+            } catch (e) { return null; }
+        }
+
+        async function initApp() {
+            const container = document.getElementById('hero-slides');
+            let currentIdx = 0;
+            let slideEls = [];
+
+            // Execute first few quickly for immediate visual impact
+            for (let i = 0; i < IMAGE_PROMPTS.length; i++) {
+                const url = await fetchImage(IMAGE_PROMPTS[i].prompt);
+                if (url) {
+                    const slide = document.createElement('div');
+                    slide.className = 'hero-slide' + (slideEls.length === 0 ? ' active' : '');
+                    slide.style.backgroundImage = `url(${url})`;
+                    container.appendChild(slide);
+                    slideEls.push(slide);
+
+                    // Map specific images to gallery/featured
+                    if (i === 0) document.getElementById('proj-img-1').src = url;
+                    if (i === 5) document.getElementById('proj-img-2').src = url;
+                    if (i === 6) document.getElementById('feat-img-1').src = url;
+                }
+            }
+
+            const showSlide = (idx) => {
+                if (slideEls.length === 0) return;
+                slideEls.forEach(s => s.classList.remove('active'));
+                slideEls[idx].classList.add('active');
+            };
+
+            const next = () => {
+                if (slideEls.length === 0) return;
+                currentIdx = (currentIdx + 1) % slideEls.length;
+                showSlide(currentIdx);
+            };
+
+            const prev = () => {
+                if (slideEls.length === 0) return;
+                currentIdx = (currentIdx - 1 + slideEls.length) % slideEls.length;
+                showSlide(currentIdx);
+            };
+
+            document.getElementById('next-slide').onclick = next;
+            document.getElementById('prev-slide').onclick = prev;
+            setInterval(next, 7000);
+        }
+
+        // INTRO OVERLAY HANDLER
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp();
+            setTimeout(() => {
+                const intro = document.getElementById('intro-overlay');
+                intro.style.transition = 'opacity 1s ease, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1)';
+                intro.style.transform = 'translateY(-100%)';
+                intro.style.opacity = '0';
+                setTimeout(() => intro.remove(), 1200);
+            }, 1500);
+        });
+    </script>
+</body>
+
+</html>
