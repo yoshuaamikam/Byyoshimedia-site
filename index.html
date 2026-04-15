@@ -754,12 +754,17 @@
 
         const apiKey = ""; // Auth handled by env
         
-        // Trimmed down to only Hero Background Prompts
-        const HERO_PROMPTS = [
-            "Modern professional 8k color photography of Austin Texas skyline at sunset. Sharp glass skyscrapers, clear reflections on the river, mirrorless camera quality.",
-            "The General Motors Renaissance Center in Detroit from the riverfront. Bright morning light, shimmering blue water, crisp modern glass towers, 8k professional travel photography.",
-            "Modern campus scenery at Michigan State University. Red Cedar River with vibrant trees and collegiate gothic buildings, sharp professional landscape photography.",
-            "High-end conceptual digital abstract visual for Financial Brand Trust and Digital Strategy. Clean lines, deep colors, corporate professional 8k photography style."
+        // Local Hero Background Images
+        const HERO_IMAGES = [
+            "./4fo4.jpeg",
+            "./aka.jpeg",
+            "./b.w.album.jpeg",
+            "./garagedawgs.jpeg",
+            "./gradwalk.jpeg",
+            "./gradwaterfall.jpg",
+            "./heedhair.jpeg",
+            "./Oldmanchess.JPG",
+            "./poolside.jpeg"
         ];
 
         async function fetchImage(prompt) {
@@ -817,10 +822,9 @@
                 slideEls.push(slide);
             };
 
-            // Process prompts sequentially for better performance
-            for (let i = 0; i < HERO_PROMPTS.length; i++) {
-                const url = await fetchImage(HERO_PROMPTS[i]);
-                updateUI(url);
+            // Load local hero images
+            for (let i = 0; i < HERO_IMAGES.length; i++) {
+                updateUI(HERO_IMAGES[i]);
             }
 
             const showSlide = (idx) => {
