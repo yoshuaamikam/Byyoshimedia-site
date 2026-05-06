@@ -45,6 +45,10 @@
             min-height: 200px;
         }
 
+        img.agency-teaser-img {
+            min-height: 0;
+        }
+
         a {
             color: inherit;
             text-decoration: none;
@@ -530,6 +534,62 @@
             position: relative;
         }
 
+        .agency-teaser-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            cursor: pointer;
+            outline-offset: 4px;
+        }
+
+        .agency-teaser-link:focus-visible {
+            outline: 2px solid var(--red);
+        }
+
+        .agency-teaser-blur-wrap {
+            position: absolute;
+            inset: -4%;
+            pointer-events: none;
+        }
+
+        .agency-teaser-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(14px) brightness(0.5) saturate(0.85);
+            transform: scale(1.06);
+            transition: filter 0.45s ease, transform 0.45s ease;
+        }
+
+        .agency-teaser-link:hover .agency-teaser-img,
+        .agency-teaser-link:focus-visible .agency-teaser-img {
+            filter: blur(9px) brightness(0.62) saturate(1);
+            transform: scale(1.04);
+        }
+
+        .agency-teaser-overlay {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            pointer-events: none;
+        }
+
+        .agency-teaser-hint {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.75);
+            text-shadow: 0 2px 24px rgba(0, 0, 0, 0.9);
+        }
+
         .ribbon {
             background: var(--red);
             padding: 1.2rem 6rem;
@@ -563,6 +623,15 @@
             h2 { font-size: 2.5rem; }
             .gallery { grid-template-columns: 1fr; gap: 3rem; }
             nav ul { display: none; }
+            .agency-teaser-overlay .ribbon {
+                padding: 0.75rem 2.25rem;
+                font-size: 1.65rem;
+            }
+            .agency-teaser-hint {
+                font-size: 0.62rem;
+                letter-spacing: 0.22em;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -746,7 +815,15 @@
                     <div class="browser-dot dot-g"></div>
                 </div>
                 <div class="browser-screen">
-                    <div class="ribbon">COMING SOON</div>
+                    <a class="agency-teaser-link" href="https://www.yoshimedia.agency/" target="_blank" rel="noopener noreferrer" aria-label="Open Yoshi Media Agency — live service tiers and CRM">
+                        <span class="agency-teaser-blur-wrap" aria-hidden="true">
+                            <img class="agency-teaser-img" src="./yoshimedia-tears-teaser.png" alt="" width="1200" height="675" decoding="async">
+                        </span>
+                        <span class="agency-teaser-overlay">
+                            <span class="ribbon">COMING SOON</span>
+                            <span class="agency-teaser-hint">Click to view yoshimedia.agency</span>
+                        </span>
+                    </a>
                 </div>
             </div>
         </div>
