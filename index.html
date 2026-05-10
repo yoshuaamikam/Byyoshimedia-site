@@ -581,13 +581,77 @@
             pointer-events: none;
         }
 
-        .agency-teaser-hint {
-            font-size: 0.85rem;
+        .agency-teaser-welcome {
+            font-size: 0.75rem;
             font-weight: 600;
-            letter-spacing: 0.28em;
+            letter-spacing: 0.22em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.85);
+            color: rgba(255, 255, 255, 0.65);
             text-shadow: 0 2px 24px rgba(0, 0, 0, 0.9);
+        }
+
+        .agency-teaser-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.25rem;
+            padding: 0.85rem 1.75rem;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--white);
+            background: var(--red);
+            border-radius: 4px;
+            text-shadow: none;
+            box-shadow: 0 12px 40px rgba(200, 37, 46, 0.45);
+        }
+
+        .agency-teaser-domain {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.45);
+            text-shadow: 0 2px 24px rgba(0, 0, 0, 0.9);
+        }
+
+        /* --- ABOUT / CONTACT --- */
+        .about-section {
+            background: #0f0f0f;
+            padding: 8rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .about-section .about-inner {
+            max-width: 640px;
+        }
+
+        .about-section p {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 1.05rem;
+            line-height: 1.75;
+            margin-bottom: 2.5rem;
+        }
+
+        .contact-emails {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-emails a {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--white);
+            border-bottom: 2px solid var(--red);
+            padding-bottom: 0.2rem;
+            align-self: flex-start;
+            letter-spacing: 0.02em;
+        }
+
+        .contact-emails a:hover {
+            color: var(--red);
         }
 
         /* --- FOOTER --- */
@@ -613,12 +677,23 @@
             h2 { font-size: 2.5rem; }
             .gallery { grid-template-columns: 1fr; gap: 3rem; }
             nav ul { display: none; }
-            .agency-teaser-hint {
-                font-size: 0.68rem;
-                letter-spacing: 0.18em;
+            .agency-teaser-welcome {
+                font-size: 0.65rem;
+                letter-spacing: 0.14em;
                 text-align: center;
-                max-width: 16rem;
-                line-height: 1.6;
+                max-width: 18rem;
+                line-height: 1.5;
+            }
+
+            .agency-teaser-cta {
+                font-size: 0.72rem;
+                padding: 0.75rem 1.35rem;
+                letter-spacing: 0.08em;
+            }
+
+            .agency-teaser-domain {
+                font-size: 0.62rem;
+                letter-spacing: 0.12em;
             }
         }
     </style>
@@ -792,10 +867,25 @@
         </div>
     </section>
 
+    <section id="about" class="about-section">
+        <div class="container">
+            <span class="kicker">About</span>
+            <div class="about-inner">
+                <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Yoshi Media</h2>
+                <p>Photography, advertising, and strategy—this portfolio is a snapshot of the work. For brand campaigns, creative production, and partnerships, the agency lives at <a href="https://yoshimedia.agency/" style="color: var(--white); font-weight: 700; border-bottom: 1px solid var(--red);">yoshimedia.agency</a>.</p>
+                <span class="sidebar-label" style="margin-bottom: 1rem;">Contact</span>
+                <div class="contact-emails">
+                    <a href="mailto:info@yoshimedia.agency">info@yoshimedia.agency</a>
+                    <a href="mailto:info@byyoshimedia.com">info@byyoshimedia.com</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="agency" class="teaser-section">
         <div class="container">
             <h2 style="color: white; margin-bottom: 2rem;">Yoshi Media Agency</h2>
-            <p style="max-width: 600px; margin: 0 auto 4rem; color: rgba(255, 255, 255, 0.4);">A full-service creative collective focusing on high-end visuals and growth-driven advertising strategies.</p>
+            <p style="max-width: 600px; margin: 0 auto 4rem; color: rgba(255, 255, 255, 0.4);">A full-service creative collective focusing on high-end visuals and growth-driven advertising strategies. Visit <a href="https://yoshimedia.agency/" style="color: rgba(255, 255, 255, 0.75); font-weight: 700;">yoshimedia.agency</a> for services and inquiries.</p>
             <div class="browser-mockup">
                 <div class="browser-header">
                     <div class="browser-dot dot-r"></div>
@@ -803,12 +893,14 @@
                     <div class="browser-dot dot-g"></div>
                 </div>
                 <div class="browser-screen">
-                    <a class="agency-teaser-link" href="https://www.yoshimedia.agency/" target="_blank" rel="noopener noreferrer" aria-label="Open Yoshi Media Agency — live service tiers and CRM">
+                    <a class="agency-teaser-link" href="https://yoshimedia.agency/" target="_blank" rel="noopener noreferrer" aria-label="Start a project — open yoshimedia.agency">
                         <span class="agency-teaser-blur-wrap" aria-hidden="true">
                             <img class="agency-teaser-img" src="./yoshimedia-tears-teaser.png" alt="" width="1200" height="675" decoding="async">
                         </span>
                         <span class="agency-teaser-overlay">
-                            <span class="agency-teaser-hint">Click to view yoshimedia.agency</span>
+                            <span class="agency-teaser-welcome">Welcome to the agency</span>
+                            <span class="agency-teaser-cta">Start a project today</span>
+                            <span class="agency-teaser-domain">yoshimedia.agency</span>
                         </span>
                     </a>
                 </div>
