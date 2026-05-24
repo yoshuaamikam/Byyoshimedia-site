@@ -612,7 +612,7 @@
             font-weight: 600;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.45);
+            color: rgba(255, 255, 255, 0.58);
             text-shadow: 0 2px 24px rgba(0, 0, 0, 0.9);
         }
 
@@ -654,6 +654,47 @@
             color: var(--red);
         }
 
+        .contact-emails a:focus-visible {
+            outline: 2px solid var(--red);
+            outline-offset: 4px;
+        }
+
+        .agency-link {
+            font-weight: 700;
+            color: var(--white);
+            border-bottom: 1px solid var(--red);
+        }
+
+        .agency-link:hover {
+            color: var(--red);
+        }
+
+        .agency-link:focus-visible {
+            outline: 2px solid var(--red);
+            outline-offset: 4px;
+        }
+
+        .agency-link-muted {
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.75);
+            border-bottom: 1px solid transparent;
+        }
+
+        .agency-link-muted:hover {
+            color: var(--white);
+            border-bottom-color: var(--red);
+        }
+
+        .agency-link-muted:focus-visible {
+            outline: 2px solid var(--red);
+            outline-offset: 4px;
+            color: var(--white);
+        }
+
+        .about-section .sidebar-label {
+            margin-bottom: 1rem;
+        }
+
         /* --- FOOTER --- */
         footer {
             padding: 8rem 5%;
@@ -676,7 +717,20 @@
             .hero-name { font-size: 3.5rem; }
             h2 { font-size: 2.5rem; }
             .gallery { grid-template-columns: 1fr; gap: 3rem; }
-            nav ul { display: none; }
+            nav {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+            nav ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+                justify-content: flex-end;
+            }
+            nav a {
+                font-size: 0.62rem;
+                letter-spacing: 0.08em;
+            }
             .agency-teaser-welcome {
                 font-size: 0.65rem;
                 letter-spacing: 0.14em;
@@ -872,11 +926,11 @@
             <span class="kicker">About</span>
             <div class="about-inner">
                 <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Yoshi Media</h2>
-                <p>Photography, advertising, and strategy—this portfolio is a snapshot of the work. For brand campaigns, creative production, and partnerships, the agency lives at <a href="https://yoshimedia.agency/" style="color: var(--white); font-weight: 700; border-bottom: 1px solid var(--red);">yoshimedia.agency</a>.</p>
-                <span class="sidebar-label" style="margin-bottom: 1rem;">Contact</span>
+                <p>Photography, advertising, and strategy—this portfolio is a snapshot of the work. For brand campaigns, creative production, and partnerships, the agency lives at <a class="agency-link" href="https://yoshimedia.agency/" target="_blank" rel="noopener noreferrer">yoshimedia.agency</a>.</p>
+                <h3 class="sidebar-label">Contact</h3>
                 <div class="contact-emails">
-                    <a href="mailto:info@yoshimedia.agency">info@yoshimedia.agency</a>
-                    <a href="mailto:info@byyoshimedia.com">info@byyoshimedia.com</a>
+                    <a href="mailto:info@yoshimedia.agency?subject=Project%20Inquiry">info@yoshimedia.agency</a>
+                    <a href="mailto:info@byyoshimedia.com?subject=Project%20Inquiry">info@byyoshimedia.com</a>
                 </div>
             </div>
         </div>
@@ -885,7 +939,7 @@
     <section id="agency" class="teaser-section">
         <div class="container">
             <h2 style="color: white; margin-bottom: 2rem;">Yoshi Media Agency</h2>
-            <p style="max-width: 600px; margin: 0 auto 4rem; color: rgba(255, 255, 255, 0.4);">A full-service creative collective focusing on high-end visuals and growth-driven advertising strategies. Visit <a href="https://yoshimedia.agency/" style="color: rgba(255, 255, 255, 0.75); font-weight: 700;">yoshimedia.agency</a> for services and inquiries.</p>
+            <p style="max-width: 600px; margin: 0 auto 4rem; color: rgba(255, 255, 255, 0.4);">A full-service creative collective focusing on high-end visuals and growth-driven advertising strategies. Visit <a class="agency-link-muted" href="https://yoshimedia.agency/" target="_blank" rel="noopener noreferrer">yoshimedia.agency</a> for services and inquiries.</p>
             <div class="browser-mockup">
                 <div class="browser-header">
                     <div class="browser-dot dot-r"></div>
