@@ -1,13 +1,13 @@
 # Deploy: yoshimedia.agency (static)
 
-Single-page portfolio: `index.html` at repo root.
+Static site at repo root: `index.html`, `portfolio.html`, `styles.css`, and image assets.
 
 ## Cloudflare Pages
 
 **Workers & Pages → Create → Pages → Connect to Git**
 
 | Setting | Value |
-|---------|--------|
+|--------|--------|
 | Repository | `yoshuaamikam/Byyoshimedia-site` |
 | Production branch | `main` |
 | Framework preset | None |
@@ -31,6 +31,7 @@ Zone `yoshimedia.agency` uses Cloudflare nameservers. Add custom domains via the
 
 ```bash
 curl -sI https://yoshimedia.agency | grep -E '^(HTTP|x-vercel|server:)'
+curl -sI https://yoshimedia.agency/portfolio | grep -E '^(HTTP|x-vercel|server:)'
 ```
 
 Expect `HTTP/2 200` and no `x-vercel-error` header.
