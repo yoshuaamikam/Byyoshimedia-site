@@ -1,5 +1,7 @@
 # Deploy: yoshimedia.agency (static)
 
+GitHub Pages deploys this site on merge to `main`.
+
 Static site at repo root: `index.html`, `portfolio.html`, `styles.css`, and image assets.
 
 ## Cloudflare Pages
