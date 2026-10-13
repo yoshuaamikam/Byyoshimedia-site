@@ -51,17 +51,29 @@
     { t: "Hat Tree", c: "Street", img: "./assets/street/P1010600.jpeg", pos: "50% 48%" },
     { t: "The Rotation", c: "Street", img: "./assets/street/P1010637.jpeg", pos: "55% 45%" },
     { t: "Silver Spoons", c: "Street", img: "./assets/street/P1010652.jpeg", pos: "50% 38%" },
-    { t: "Stop & Smell", c: "Street", img: "./assets/street/pets/IMG_9166.jpeg", pos: "62% 20%", person: "Pets", hero: "./assets/portfolio-hero/stop-and-smell.webp" },
-    { t: "The Prowl", c: "Street", img: "./assets/street/pets/IMG_9170.jpeg", pos: "62% 78%", person: "Pets" },
-    { t: "Blep", c: "Street", img: "./assets/street/pets/IMG_9171.jpeg", pos: "68% 12%", person: "Pets" },
+    { t: "Stop & Smell", c: "Street", img: "./assets/street/pets/IMG_9166.jpeg", pos: "62% 20%", hero: "./assets/portfolio-hero/stop-and-smell.webp" },
+    { t: "The Prowl", c: "Street", img: "./assets/street/pets/IMG_9170.jpeg", pos: "62% 78%" },
+    { t: "Blep", c: "Street", img: "./assets/street/pets/IMG_9171.jpeg", pos: "68% 12%" },
   ];
 
   const ALLY_SLIDE = "./assets/campaigns/ally-strategy.png";
+  /* Shoot groups: every photo listed under one id is one shoot, shown as a single portfolio row
+     and opened in the lightbox as a set. Photos in no group are one-photo shoots. Order is the
+     lightbox order. Titles match SW_PROJECTS. */
+  const SW_SHOOTS = [
+    { id: "graduation-1", photos: ["Michigan State", "Class Act", "The Walk"] },
+    { id: "graduation-2", photos: ["Flag Bearer", "The Gown", "With Honors", "Say Less"] },
+    { id: "graduation-3", photos: ["Spartan Stadium", "Gratitude", "Green & Gold"] },
+    { id: "pets", photos: ["Stop & Smell", "The Prowl", "Blep"] },
+  ];
+  const SHOOT_OF = new Map();
+  SW_SHOOTS.forEach((shoot) => shoot.photos.forEach((title) => SHOOT_OF.set(title, shoot.id)));
+  SW_PROJECTS.forEach((p) => { if (SHOOT_OF.has(p.t)) p.shoot = SHOOT_OF.get(p.t); });
+
   const portfolioCatalog = SW_PROJECTS.slice();
 
   const WORK_LB_BLANK = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
   const HOME_WORK_PREVIEW = 6;
-  const PORTFOLIO_PERSON_MAX = 80;
   let workLbPrevOverflow = "", workLbReturnFocus = null, workLbWired = false, workLbAnon = false;
   let workLbPlaylist = [], workLbIndex = 0, workLbTouch = null;
 
@@ -71,35 +83,44 @@
     typeof window.matchMedia === "function" && window.matchMedia("(max-width: 1024px)").matches;
   const scrollBehaviorPref = () => (prefersReducedMotion() || isNarrow() ? "auto" : "smooth");
 
-  function normalizePerson(value) {
-    return String(value || "").trim().replace(/\s+/g, " ").slice(0, PORTFOLIO_PERSON_MAX);
-  }
-
-  /* A "shoot" is every photo that shares a person/series name; photos without one stand alone. */
-  function groupCatalogByPerson(items) {
+  /* A "shoot" is every photo sharing a shoot id; photos without one stand alone. */
+  function groupCatalogByShoot(items) {
     const sections = [];
-    const byPerson = new Map();
+    const byShoot = new Map();
     for (const item of items) {
-      const person = normalizePerson(item.person);
-      if (!person) {
-        sections.push({ person: "", cover: item, photos: [item] });
+      const id = item.shoot || "";
+      if (!id) {
+        sections.push({ shoot: "", cover: item, photos: [item] });
         continue;
       }
-      const existing = byPerson.get(person);
+      const existing = byShoot.get(id);
       if (!existing) {
-        const section = { person, cover: item, photos: [item] };
-        byPerson.set(person, section);
+        const section = { shoot: id, cover: item, photos: [item] };
+        byShoot.set(id, section);
         sections.push(section);
         continue;
       }
       existing.photos.push(item);
-      if (item.isCover && !existing.cover.isCover) existing.cover = item;
     }
     return sections;
   }
 
-  function personCovers(items) {
-    return groupCatalogByPerson(items).map((section) => ({ ...section.cover, count: section.photos.length }));
+  function shootCovers(items) {
+    return groupCatalogByShoot(items).map((section) => ({ ...section.cover, count: section.photos.length }));
+  }
+
+  /* Every photo in the same shoot as `p`, in lightbox order, from the full catalog (not the
+     current filter), so any entry point opens the same set. */
+  function shootPlaylist(p) {
+    if (!p || !p.shoot) return [p];
+    const photos = portfolioCatalog.filter((item) => item.shoot === p.shoot);
+    return photos.length ? photos : [p];
+  }
+
+  function openShootLightbox(p, triggerEl, opts) {
+    const playlist = shootPlaylist(p);
+    const index = Math.max(0, playlist.findIndex((item) => item.img === p.img));
+    openWorkLightbox(playlist[index] || p, triggerEl, { ...(opts || {}), playlist, index });
   }
 
   function workLightboxOpen() {
@@ -151,6 +172,7 @@
     showWorkLightboxPhoto();
     workLbPrevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.documentElement.classList.add("sw-lb-open");
     lb.removeAttribute("hidden");
     if (lbClose) lbClose.focus();
   }
@@ -164,6 +186,7 @@
     workLbPlaylist = [];
     workLbIndex = 0;
     document.body.style.overflow = workLbPrevOverflow;
+    document.documentElement.classList.remove("sw-lb-open");
     workLbPrevOverflow = "";
     const restore = workLbReturnFocus;
     workLbReturnFocus = null;
@@ -189,6 +212,12 @@
         workLbTouch = null;
         if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) stepWorkLightbox(dx < 0 ? 1 : -1);
       }, { passive: true });
+      lb.addEventListener("touchmove", (e) => {
+        if (!workLbTouch || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - workLbTouch.x;
+        const dy = e.touches[0].clientY - workLbTouch.y;
+        if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) e.preventDefault();
+      }, { passive: false });
       lb.addEventListener("touchcancel", () => { workLbTouch = null; });
     }
     if (lbClose) lbClose.addEventListener("click", (e) => { e.stopPropagation(); closeWorkLightbox(); });
@@ -264,15 +293,8 @@
       host.querySelectorAll(".sw-row.is-open").forEach((r) => { if (r !== except) r.classList.remove("is-open"); });
     };
     const openAt = (el) => {
-      const idx = Number(el.dataset.swIdx);
-      const section = opts && typeof opts.playlistFor === "function" ? opts.playlistFor(idx) : null;
-      if (section && Array.isArray(section.photos) && section.photos.length) {
-        const start = Math.max(0, section.photos.findIndex((item) => item.img === section.cover.img));
-        openWorkLightbox(section.cover, el, { anon, playlist: section.photos, index: start });
-        return;
-      }
-      const p = getList()[idx];
-      if (p) openWorkLightbox(p, el, { anon });
+      const p = getList()[Number(el.dataset.swIdx)];
+      if (p) openShootLightbox(p, el, { anon });
     };
     host.addEventListener("mouseover", (e) => {
       if (!hoverable) return;
@@ -376,11 +398,11 @@
       }
       current.hidden = true; animations.forEach((a) => a.cancel()); animations = []; [current, other] = [other, current]; pos = next; elapsed = 0; busy = false; label(); if (manual) q(".ph-status").textContent = list[pos].c + ", photograph " + (pos + 1) + " of " + list.length; schedule();
     }
-    function setCategory(cat) { version++; category = cat; animations.forEach((a) => a.cancel()); animations = []; busy = false; other.hidden = true; const photos = heroPhotos(); list = cat === "All" ? photos : photos.filter((p) => p.c === cat); pos = 0; elapsed = 0; q(".ph-progress span").style.transform = "scaleX(0)"; q(".ph-thumbs").replaceChildren(); root.hidden = list.length === 0; if (!list.length) { current.hidden = true; schedule(); return; } current.hidden = false; load(current, list[0]); current.querySelector(".ph-sharp").style.transform = "none"; list.forEach((p, i) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", "Show " + p.t + " — " + p.c); const img = document.createElement("img"); img.src = p.src; img.alt = ""; img.loading = "lazy"; b.append(img); b.addEventListener("click", () => select(i, i >= pos ? 1 : -1)); q(".ph-thumbs").append(b); }); label(); schedule(); }
+    function setCategory(cat) { version++; category = cat; animations.forEach((a) => a.cancel()); animations = []; busy = false; other.hidden = true; const photos = heroPhotos(); list = cat === "All" ? photos : photos.filter((p) => p.c === cat); pos = 0; elapsed = 0; q(".ph-progress span").style.transform = "scaleX(0)"; q(".ph-thumbs").replaceChildren(); root.hidden = list.length === 0; if (!list.length) { current.hidden = true; schedule(); return; } current.hidden = false; load(current, list[0]); current.querySelector(".ph-sharp").style.transform = "none"; list.forEach((p, i) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", "Open " + p.c + " photo " + (i + 1) + " full screen"); const img = document.createElement("img"); img.src = p.src; img.alt = ""; img.loading = "lazy"; b.append(img); b.addEventListener("click", () => openShootLightbox(list[i], b, { anon: true })); q(".ph-thumbs").append(b); }); label(); schedule(); }
     function tick(t) { frame = 0; if (!active()) return; const dt = last ? Math.min(t - last, 60) : 0; last = t; if (!busy) { elapsed += dt; const p = Math.min(elapsed / 8200, 1); if (!reduced.matches) { px += (tx - px) * .035; py += (ty - py) * .035; current.querySelector(".ph-sharp").style.transform = `translate(${px * 10 + p * 3}px,${py * 7 - p * 3}px) scale(${1 + p * .035})`; current.querySelector(".ph-soft").style.transform = `translate(${-px * 6}px,${-py * 4}px) scale(1.1)`; } q(".ph-progress span").style.transform = `scaleX(${p})`; if (p === 1) select(pos + 1, 1, false); } frame = requestAnimationFrame(tick); }
     q(".ph-pause").addEventListener("click", () => { playing = !playing; pauseLabel(); schedule(); }); q(".ph-prev").addEventListener("click", () => select(pos - 1, -1)); q(".ph-next").addEventListener("click", () => select(pos + 1, 1));
-    stage.addEventListener("click", (e) => { if (e.target.closest("button,a") || performance.now() < clickBlockedUntil) return; select(pos + 1, 1); });
-    stage.addEventListener("keydown", (e) => { if (e.target !== stage) return; if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); const d = e.key === "ArrowRight" ? 1 : -1; select(pos + d, d); } });
+    stage.addEventListener("click", (e) => { if (e.target.closest("button,a") || performance.now() < clickBlockedUntil || !list[pos]) return; openShootLightbox(list[pos], stage, { anon: true }); });
+    stage.addEventListener("keydown", (e) => { if (e.target !== stage) return; if ((e.key === "Enter" || e.key === " ") && list[pos]) { e.preventDefault(); openShootLightbox(list[pos], stage, { anon: true }); return; } if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); const d = e.key === "ArrowRight" ? 1 : -1; select(pos + d, d); } });
     stage.addEventListener("pointermove", (e) => { if (e.pointerType !== "mouse") return; const r = stage.getBoundingClientRect(); tx = (e.clientX - r.left) / r.width - .5; ty = (e.clientY - r.top) / r.height - .5; }); stage.addEventListener("pointerleave", () => { tx = ty = 0; });
     stage.addEventListener("wheel", (e) => { const now = performance.now(); if (!e.ctrlKey && Math.abs(e.deltaY) > 15 && now - wheelAt > 1400) { wheelAt = now; const d = e.deltaY > 0 ? 1 : -1; select(pos + d, d); } }, { passive: true });
     let touch = null; stage.addEventListener("touchstart", (e) => { touch = e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null; }, { passive: true }); stage.addEventListener("touchend", (e) => { if (!touch) return; const dx = e.changedTouches[0].clientX - touch.x, dy = e.changedTouches[0].clientY - touch.y; touch = null; if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) { clickBlockedUntil = performance.now() + 500; const d = dx < 0 ? 1 : -1; select(pos + d, d); } }, { passive: true }); stage.addEventListener("touchcancel", () => { touch = null; });
@@ -404,11 +426,9 @@
     const hero = initPhotoHero();
     let filter = "All", expanded = false;
     const list = () => workListFor(filter);
-    const sections = () => groupCatalogByPerson(list());
-    const covers = () => personCovers(list());
-    const playlistFor = (idx) => sections()[idx] || null;
-    wireWorkHost(rowsHost, covers, { anon: true, playlistFor });
-    if (grid) wireWorkHost(grid, covers, { anon: true, playlistFor });
+    const covers = () => shootCovers(list());
+    wireWorkHost(rowsHost, covers, { anon: true });
+    if (grid) wireWorkHost(grid, covers, { anon: true });
     function render() {
       const items = covers();
       if (expanded) {
