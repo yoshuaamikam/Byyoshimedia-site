@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./portfolio.css">
 
 </head>
 
@@ -56,51 +57,48 @@
         </div>
     </header>
 
-    <section id="work">
-        <div class="container">
-            <div class="work-preview-header">
-                <span class="kicker">Selected Work</span>
-                <h2>Featured Projects</h2>
+    <div class="sw-section" id="work" aria-label="Selected work">
+        <div class="sw-inner">
+            <span class="sw-eyebrow">Selected Work</span>
+            <div class="sw-head">
+                <h2 class="sw-title">The Work</h2>
             </div>
-
-            <article class="work-row">
-                <div class="work-row-copy">
-                    <span class="kicker">Photography</span>
-                    <h3>Spartan Stories</h3>
-                    <p>Graduation portraits from Michigan State.</p>
+            <div class="sw-tabs" role="tablist" aria-label="Work category">
+                <button type="button" class="sw-tab is-on" data-sw-tab="photography" role="tab" aria-selected="true">Photography</button>
+                <button type="button" class="sw-tab" data-sw-tab="advertising" role="tab" aria-selected="false">Advertising</button>
+            </div>
+            <div id="swRows" class="sw-rows"></div>
+            <div class="sw-more" id="swMore">
+                <a class="sw-more-btn" href="./portfolio.html">
+                    View all work
+                    <span class="sw-more-count" id="swMoreCount" aria-hidden="true"></span>
+                </a>
+            </div>
+            <div class="sw-ad" id="swAd" hidden>
+                <div class="sw-ad-head">
+                    <h3 class="sw-ad-title">Ally, Do It Right</h3>
+                    <span class="sw-ad-tag">Capstone</span>
                 </div>
-                <div class="work-row-media">
-                    <img src="./GradphotoKEV.jpg" alt="Michigan State Graduation" width="1600" height="900" decoding="async">
+                <p class="sw-ad-lede">
+                    MSU ADV 486 speculative campaign, 2024 — digital engagement and brand trust strategy
+                    focusing on consumer confidence in financial growth. Not a paid engagement.
+                </p>
+                <div class="sw-ad-card">
+                    <video controls playsinline preload="metadata" aria-label="Ally Do It Right — MSU ADV 486 speculative capstone video, 2024">
+                        <source src="./assets/campaigns/ally-adv-486-presentation.mp4" type="video/mp4" />
+                    </video>
                 </div>
-            </article>
-
-            <article class="work-row">
-                <div class="work-row-copy">
-                    <span class="kicker">Photography</span>
-                    <h3>Austin Series</h3>
-                    <p>Downtown buildings and street scenes in Austin.</p>
+                <div class="sw-ad-card sw-ad-slide" id="swAllySlide" role="button" tabindex="0" aria-label="Open Ally speculative capstone strategy slide full screen">
+                    <div
+                        class="sw-ad-slide-img"
+                        role="img"
+                        aria-label="Ally speculative capstone strategy and rationale — MSU ADV 486, 2024"
+                        style="background-image: url('./assets/campaigns/ally-strategy.png')"
+                    ></div>
                 </div>
-                <div class="work-row-media">
-                    <img src="./BuildingDTAustin.jpeg" alt="Austin Skyline" width="1600" height="900" decoding="async">
-                </div>
-            </article>
-
-            <article class="work-row">
-                <div class="work-row-copy">
-                    <span class="kicker">Strategy &amp; Creative</span>
-                    <h3>Ally Financial Strategy</h3>
-                    <p>Sample campaign on trust and digital engagement.</p>
-                </div>
-                <div class="work-row-media">
-                    <img src="./allycampaign.png" alt="Ally Campaign Strategy" width="1600" height="900" decoding="async">
-                </div>
-            </article>
-
-            <div class="work-cta-wrap">
-                <a class="work-cta" href="./portfolio.html">View full portfolio</a>
             </div>
         </div>
-    </section>
+    </div>
 
     <section id="resume" class="resume-section">
         <div class="container">
@@ -211,6 +209,19 @@
 
     <footer>&copy; <span id="year"></span> YOSHUA ISRAEL-DUGEON. ALL RIGHTS RESERVED.</footer>
 
+    <div id="swLightbox" class="sw-lightbox" hidden role="dialog" aria-modal="true" aria-label="Full size photo preview">
+        <button type="button" class="sw-lightbox-nav sw-lightbox-prev" id="swLightboxPrev" hidden aria-label="Previous photo">←</button>
+        <img id="swLightboxImg" alt="" decoding="async" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
+        <button type="button" class="sw-lightbox-nav sw-lightbox-next" id="swLightboxNext" hidden aria-label="Next photo">→</button>
+        <div class="sw-lightbox-meta">
+            <div class="sw-lightbox-cat" id="swLightboxCat"></div>
+            <div class="sw-lightbox-title" id="swLightboxTitle"></div>
+            <div class="sw-lightbox-count" id="swLightboxCount" hidden></div>
+        </div>
+        <button type="button" class="sw-lightbox-close" id="swLightboxClose" aria-label="Close full-screen photo">&#10005;</button>
+    </div>
+
+    <script src="./portfolio.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
