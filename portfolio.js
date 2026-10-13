@@ -59,11 +59,16 @@
   const ALLY_SLIDE = "./assets/campaigns/ally-strategy.png";
   /* Shoot groups: every photo listed under one id is one shoot, shown as a single portfolio row
      and opened in the lightbox as a set. Photos in no group are one-photo shoots. Order is the
-     lightbox order. Titles match SW_PROJECTS. */
+     lightbox order. Titles match SW_PROJECTS. Mirrors migration 0030 in By-Yoshi-Media; the
+     singles (portraits Poolside, AKA, Fall Colors, Midnight Cowboy, Blue Sky; street Downtown
+     Austin, October, Violators) are deliberately left out. */
   const SW_SHOOTS = [
-    { id: "graduation-1", photos: ["Michigan State", "Class Act", "The Walk"] },
-    { id: "graduation-2", photos: ["Flag Bearer", "The Gown", "With Honors", "Say Less"] },
-    { id: "graduation-3", photos: ["Spartan Stadium", "Gratitude", "Green & Gold"] },
+    { id: "grad-03", photos: ["Michigan State", "Gratitude", "Green & Gold"] },
+    { id: "grad-02", photos: ["Class Act", "With Honors", "Say Less", "Spartan Stadium"] },
+    { id: "grad-01", photos: ["The Walk", "Flag Bearer", "The Gown"] },
+    { id: "portrait-2021-02-07", photos: ["Off the Wall", "Face to Face"] },
+    { id: "portrait-2020-11-03", photos: ["Rewind", "Stairwell"] },
+    { id: "street-2020-10-18", photos: ["Hat Tree", "The Rotation", "Silver Spoons"] },
     { id: "pets", photos: ["Stop & Smell", "The Prowl", "Blep"] },
   ];
   const SHOOT_OF = new Map();
