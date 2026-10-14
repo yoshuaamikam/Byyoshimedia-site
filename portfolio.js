@@ -27,7 +27,6 @@
      the full-frame derivative used by the carousel. */
   const SW_PROJECTS = [
     { t: "Michigan State", c: "Graduation", img: "./assets/graduation/P1020352-680185ce-656f-44a5-8654-5a3439415c52.png", pos: "50% 36%", hero: "./assets/portfolio-hero/michigan-state.webp" },
-    { t: "Class Act", c: "Graduation", img: "./assets/graduation/IMG_0139-6bcee8b1-5897-4010-be30-1821d29041d1.png", pos: "50% 22%" },
     { t: "The Walk", c: "Graduation", img: "./assets/graduation/P1010942-e1b9d89b-07b4-407a-89e6-d7b75331b2fc.jpg", pos: "50% 18%", hero: "./assets/portfolio-hero/the-walk.webp" },
     { t: "Flag Bearer", c: "Graduation", img: "./assets/graduation/P1010990-b22542c0-2204-422d-93eb-e2c88748cba7.png", pos: "38% 16%" },
     { t: "The Gown", c: "Graduation", img: "./assets/graduation/P1020012-7c98dd61-ce41-4b9c-b919-0280b007961e.png", pos: "40% 18%" },
@@ -64,7 +63,7 @@
      Austin, October, Violators) are deliberately left out. */
   const SW_SHOOTS = [
     { id: "grad-03", photos: ["Michigan State", "Gratitude", "Green & Gold"] },
-    { id: "grad-02", photos: ["Class Act", "With Honors", "Say Less", "Spartan Stadium"] },
+    { id: "grad-02", photos: ["With Honors", "Say Less", "Spartan Stadium"] },
     { id: "grad-01", photos: ["The Walk", "Flag Bearer", "The Gown"] },
     { id: "portrait-2021-02-07", photos: ["Off the Wall", "Face to Face"] },
     { id: "portrait-2020-11-03", photos: ["Rewind", "Stairwell"] },
