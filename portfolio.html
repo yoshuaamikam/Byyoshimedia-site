@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="./styles.css?v=f9af12e8">
-    <link rel="stylesheet" href="./portfolio.css?v=49f4c040">
+    <link rel="stylesheet" href="./portfolio.css?v=e3202b46">
 </head>
 
 <body>
@@ -31,12 +31,24 @@
     <main class="pf-page">
         <div class="sw-section sw-section--page" id="portfolioWork">
             <div class="sw-inner">
-                <h1 class="ph-heading">Photography <span>Yoshua Israel-Dugeon</span></h1>
-                <div class="sw-filters" id="pfFilters" role="tablist" aria-label="Category">
+                <h1 class="ph-sr">Portfolio</h1>
+                <div class="ph-heading">
+                    <div class="ph-groups" role="tablist" aria-label="Portfolio category">
+                        <button type="button" class="ph-group is-on" data-pf-group="photography" role="tab" aria-selected="true">Photography</button>
+                        <button type="button" class="ph-group" data-pf-group="designs" role="tab" aria-selected="false">Designs</button>
+                    </div>
+                    <span>Yoshua Israel-Dugeon</span>
+                </div>
+                <div class="sw-filters" id="pfFilters" data-pf-filters="photography" role="tablist" aria-label="Photography category">
                     <button type="button" class="sw-filter is-on" data-pf-filter="All" role="tab" aria-selected="true">All</button>
                     <button type="button" class="sw-filter" data-pf-filter="Graduation" role="tab" aria-selected="false">Graduation</button>
                     <button type="button" class="sw-filter" data-pf-filter="Portraits" role="tab" aria-selected="false">Portraits</button>
                     <button type="button" class="sw-filter" data-pf-filter="Street" role="tab" aria-selected="false">Street</button>
+                </div>
+                <div class="sw-filters" id="pfDesignFilters" data-pf-filters="designs" role="tablist" aria-label="Designs category" hidden>
+                    <button type="button" class="sw-filter is-on" data-pf-filter="All" role="tab" aria-selected="true">All</button>
+                    <button type="button" class="sw-filter" data-pf-filter="Logos" role="tab" aria-selected="false">Logos</button>
+                    <button type="button" class="sw-filter" data-pf-filter="Designs and Brochures" role="tab" aria-selected="false">Designs and Brochures</button>
                 </div>
                 <section id="photoHero" aria-label="Featured photography" aria-roledescription="carousel">
                     <div class="ph-stage" tabindex="0" aria-label="Photograph viewer. Click to show the next photograph, or use left and right arrow keys.">
@@ -153,13 +165,13 @@
             <div class="sw-lightbox-title" id="swLightboxTitle"></div>
             <div class="sw-lightbox-count" id="swLightboxCount" hidden></div>
         </div>
-        <div class="sw-lightbox-thumbs" id="swLightboxThumbs" hidden role="group" aria-label="Photos in this shoot"></div>
+        <div class="sw-lightbox-thumbs" id="swLightboxThumbs" hidden role="group" aria-label="Items in this project"></div>
         <button type="button" class="sw-lightbox-close" id="swLightboxClose" aria-label="Close full-screen photo">&#10005;</button>
     </div>
 
     <footer>&copy; <span id="year"></span> YOSHUA ISRAEL-DUGEON. ALL RIGHTS RESERVED.</footer>
 
-    <script src="./portfolio.js?v=24ef848f"></script>
+    <script src="./portfolio.js?v=f72dd0b2"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>

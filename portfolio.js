@@ -77,6 +77,21 @@
 
   const portfolioCatalog = SW_PROJECTS.slice();
 
+  /* Designs: a second top-level category beside Photography. Kept out of SW_PROJECTS and
+     SW_SHOOTS so the Photography catalog, hero, counts and shoot sets are untouched. Each
+     project is one shoot-style set (`shoot`); `pt` is the project name shown on its row, and
+     `fit: "contain"` renders the artwork uncropped. Array order is the lightbox order. */
+  const DESIGN_PROJECTS = [
+    { t: "Hero Stacked", c: "Logos", img: "./assets/designs/protein-hero-stacked.webp", shoot: "protein-on-the-beat", pt: "Protein on the Beat" },
+    { t: "Wordmark", c: "Logos", img: "./assets/designs/protein-wordmark.webp", shoot: "protein-on-the-beat", pt: "Protein on the Beat" },
+    { t: "Horizontal Lockup", c: "Logos", img: "./assets/designs/protein-horizontal-lockup.webp", shoot: "protein-on-the-beat", pt: "Protein on the Beat" },
+    { t: "Circular Seal", c: "Logos", img: "./assets/designs/protein-circular-seal.webp", shoot: "protein-on-the-beat", pt: "Protein on the Beat" },
+    { t: "Streetwear Hit", c: "Logos", img: "./assets/designs/protein-streetwear-hit.webp", shoot: "protein-on-the-beat", pt: "Protein on the Beat" },
+    { t: "Super Slab Sale", c: "Designs and Brochures", img: "./assets/designs/azt-super-slab-sale.webp", shoot: "arizona-tile-flyers", pt: "Arizona Tile Flyers" },
+    { t: "Annual Tile Showcase", c: "Designs and Brochures", img: "./assets/designs/azt-tile-showcase.webp", shoot: "arizona-tile-flyers", pt: "Arizona Tile Flyers" },
+  ].map((d) => ({ ...d, fit: "contain" }));
+  const lightboxCatalog = portfolioCatalog.concat(DESIGN_PROJECTS);
+
   const WORK_LB_BLANK = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
   const HOME_WORK_PREVIEW = 6;
   let workLbPrevOverflow = "", workLbReturnFocus = null, workLbWired = false;
@@ -118,7 +133,7 @@
      current filter), so any entry point opens the same set. */
   function shootPlaylist(p) {
     if (!p || !p.shoot) return [p];
-    const photos = portfolioCatalog.filter((item) => item.shoot === p.shoot);
+    const photos = lightboxCatalog.filter((item) => item.shoot === p.shoot);
     return photos.length ? photos : [p];
   }
 
@@ -175,7 +190,7 @@
     workLbPlaylist.forEach((item, i) => {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "sw-lightbox-thumb";
+      btn.className = "sw-lightbox-thumb" + (item.fit === "contain" ? " is-contain" : "");
       btn.setAttribute("aria-label", `Show photo ${i + 1} of ${total}: ${item.t}`);
       const img = document.createElement("img");
       img.src = item.img;
@@ -274,6 +289,13 @@
     return cat === "All" ? portfolioCatalog : portfolioCatalog.filter((p) => p.c === cat);
   }
 
+  function designListFor(cat) {
+    return cat === "All" ? DESIGN_PROJECTS : DESIGN_PROJECTS.filter((p) => p.c === cat);
+  }
+
+  const itemTitle = (p) => p.pt || p.t;
+  const fitClass = (p) => (p.fit === "contain" ? " is-contain" : "");
+
   /* Hover/tile crop focal point. Faces sit in the upper third on most people photos;
      Street defaults to center unless pos is set. */
   function workFocalPos(p) {
@@ -289,17 +311,17 @@
       const num = pad2(i + 1);
       const pos = workFocalPos(p);
       const extra = Number(p.count) > 1 ? ` (${pad2(p.count)} photos)` : "";
-      const label = anon ? `${esc(p.c)} photo ${num}${extra} — open photo full screen` : `${esc(p.t)} — open photo full screen`;
+      const label = anon ? `${esc(p.c)} photo ${num}${extra} — open photo full screen` : p.fit === "contain" ? `${esc(itemTitle(p))}${extra ? ` (${pad2(p.count)} items)` : ""} — open full screen` : `${esc(p.t)} — open photo full screen`;
       const countMark = Number(p.count) > 1 ? `<span class="sw-row-count">${pad2(p.count)}</span>` : "";
       const titleCell = anon
         ? `<span class="sw-row-title sw-row-title--num">${num}${countMark}</span>`
-        : `<span class="sw-row-num">${num}</span><span class="sw-row-title">${esc(p.t)}</span>`;
+        : `<span class="sw-row-num">${num}</span><span class="sw-row-title">${esc(itemTitle(p))}${countMark}</span>`;
       return `<div class="sw-row${anon ? " sw-row--anon" : ""}" data-sw-idx="${i}" tabindex="0" role="button" aria-label="${label}">
-          <div class="sw-row-photo" aria-hidden="true"><div style="background-image:url('${esc(p.img)}');background-position:${pos}"></div></div>
+          <div class="sw-row-photo${fitClass(p)}" aria-hidden="true"><div style="background-image:url('${esc(p.img)}');background-position:${pos}"></div></div>
           <div class="sw-row-grid">
             ${titleCell}
             <span class="sw-row-cat">${esc(p.c)}</span>
-            <span class="pf-thumb-m" aria-hidden="true"><img src="${esc(p.img)}" alt="" width="80" height="60" loading="lazy" decoding="async" style="object-position:${pos}" /></span>
+            <span class="pf-thumb-m${fitClass(p)}" aria-hidden="true"><img src="${esc(p.img)}" alt="" width="80" height="60" loading="lazy" decoding="async" style="object-position:${pos}" /></span>
           </div>
         </div>`;
     }).join("");
@@ -311,12 +333,12 @@
     return list.map((p, i) => {
       const pos = workFocalPos(p);
       const extra = Number(p.count) > 1 ? ` (${pad2(p.count)} photos)` : "";
-      const label = anon ? `${esc(p.c)} photo ${pad2(i + 1)}${extra} — open photo full screen` : `${esc(p.t)} — open photo full screen`;
+      const label = anon ? `${esc(p.c)} photo ${pad2(i + 1)}${extra} — open photo full screen` : p.fit === "contain" ? `${esc(itemTitle(p))}${extra ? ` (${pad2(p.count)} items)` : ""} — open full screen` : `${esc(p.t)} — open photo full screen`;
       const cap = anon
         ? `<span class="sw-tile-cap sw-tile-cap--anon"><span class="sw-tile-cat">${esc(p.c)}</span></span>`
-        : `<span class="sw-tile-cap"><span class="sw-tile-title">${esc(p.t)}</span><span class="sw-tile-cat">${esc(p.c)}</span></span>`;
+        : `<span class="sw-tile-cap"><span class="sw-tile-title">${esc(itemTitle(p))}</span><span class="sw-tile-cat">${esc(p.c)}</span></span>`;
       const countMark = Number(p.count) > 1 ? `<span class="sw-tile-count">${pad2(p.count)}</span>` : "";
-      return `<button type="button" class="sw-tile" data-sw-idx="${i}" aria-label="${label}">
+      return `<button type="button" class="sw-tile${fitClass(p)}" data-sw-idx="${i}" aria-label="${label}">
           <img src="${esc(p.img)}" alt="" loading="lazy" decoding="async" style="object-position:${pos}" />
           ${countMark}
           ${cap}
@@ -380,21 +402,27 @@
     const moreWrap = document.getElementById("swMore");
     const moreCount = document.getElementById("swMoreCount");
     const tabs = [...document.querySelectorAll(".sw-tab")];
+    const moreLink = moreWrap ? moreWrap.querySelector("a") : null;
     const preview = () => portfolioCatalog.slice(0, HOME_WORK_PREVIEW);
-    wireWorkHost(rowsHost, preview);
-    if (moreCount) moreCount.textContent = `${portfolioCatalog.length} projects`;
+    const designCovers = () => shootCovers(DESIGN_PROJECTS);
+    let tab = "photography";
+    const tabList = () => (tab === "designs" ? designCovers() : preview());
+    wireWorkHost(rowsHost, tabList);
     function applyTab(next) {
+      tab = next;
       const photo = next === "photography";
+      const designs = next === "designs";
       tabs.forEach((t) => {
         const on = t.dataset.swTab === next;
         t.classList.toggle("is-on", on);
         t.setAttribute("aria-selected", on ? "true" : "false");
       });
-      rowsHost.hidden = !photo;
-      if (adPane) adPane.hidden = photo;
-      if (moreWrap) moreWrap.hidden = !photo;
-      if (photo) rowsHost.innerHTML = workRowsHtml(preview());
-      if (moreCount) moreCount.textContent = `${portfolioCatalog.length} projects`;
+      rowsHost.hidden = !(photo || designs);
+      if (adPane) adPane.hidden = photo || designs;
+      if (moreWrap) moreWrap.hidden = !(photo || designs);
+      if (photo || designs) rowsHost.innerHTML = workRowsHtml(tabList());
+      if (moreLink) moreLink.setAttribute("href", designs ? "./portfolio.html#designs" : "./portfolio.html");
+      if (moreCount) moreCount.textContent = designs ? `${designCovers().length} projects` : `${portfolioCatalog.length} projects`;
     }
     tabs.forEach((t) => t.addEventListener("click", () => applyTab(t.dataset.swTab)));
     const allySlide = document.getElementById("swAllySlide");
@@ -457,23 +485,25 @@
     rowsHost.dataset.wired = "1";
     wireWorkLightbox();
     const grid = document.getElementById("pfGrid");
-    const filtersWrap = document.getElementById("pfFilters");
-    const filters = filtersWrap ? [...filtersWrap.querySelectorAll("[data-pf-filter]")] : [];
+    const groupTabs = [...document.querySelectorAll("[data-pf-group]")];
+    const filterWraps = [...document.querySelectorAll("[data-pf-filters]")];
     const toggle = document.getElementById("pfViewToggle");
     const toggleLabel = document.getElementById("pfViewToggleLabel");
     const empty = '<p class="sw-empty">No work in this category yet.</p>';
     const hero = initPhotoHero();
-    let filter = "All", expanded = false;
-    const list = () => workListFor(filter);
+    const filterOf = { photography: "All", designs: "All" };
+    let group = "photography", expanded = false;
+    const list = () => (group === "designs" ? designListFor(filterOf.designs) : workListFor(filterOf.photography));
     const covers = () => shootCovers(list());
     wireWorkHost(rowsHost, covers, { anon: true });
     if (grid) wireWorkHost(grid, covers, { anon: true });
     function render() {
       const items = covers();
+      const anon = group === "photography";
       if (expanded) {
-        if (grid) grid.innerHTML = items.length ? workTilesHtml(items, { anon: true }) : empty;
+        if (grid) grid.innerHTML = items.length ? workTilesHtml(items, { anon }) : empty;
       } else {
-        rowsHost.innerHTML = items.length ? workRowsHtml(items, { anon: true }) : empty;
+        rowsHost.innerHTML = items.length ? workRowsHtml(items, { anon }) : empty;
       }
       rowsHost.hidden = expanded;
       if (grid) grid.hidden = !expanded;
@@ -485,14 +515,42 @@
       if (toggleLabel) toggleLabel.textContent = expanded ? "List view" : "Expand all";
       render();
     }
-    filters.forEach((f) => f.addEventListener("click", () => {
-      filter = f.dataset.pfFilter;
-      hero.setCategory(filter);
-      filters.forEach((x) => { const on = x === f; x.classList.toggle("is-on", on); x.setAttribute("aria-selected", on ? "true" : "false"); });
+    function syncFilters(g) {
+      filterWraps.forEach((wrap) => {
+        const on = wrap.dataset.pfFilters === g;
+        wrap.hidden = !on;
+        wrap.querySelectorAll("[data-pf-filter]").forEach((x) => {
+          const sel = on && x.dataset.pfFilter === filterOf[g];
+          x.classList.toggle("is-on", sel);
+          x.setAttribute("aria-selected", sel ? "true" : "false");
+        });
+      });
+    }
+    function setGroup(next, fromUser) {
+      group = next;
+      groupTabs.forEach((t) => {
+        const on = t.dataset.pfGroup === group;
+        t.classList.toggle("is-on", on);
+        t.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      syncFilters(group);
+      hero.setCategory(group === "photography" ? filterOf.photography : "");
+      if (fromUser && window.history && history.replaceState) {
+        history.replaceState(null, "", group === "designs" ? "#designs" : location.pathname + location.search);
+      }
       render();
-    }));
+    }
+    groupTabs.forEach((t) => t.addEventListener("click", () => { if (t.dataset.pfGroup !== group) setGroup(t.dataset.pfGroup, true); }));
+    filterWraps.forEach((wrap) => wrap.querySelectorAll("[data-pf-filter]").forEach((f) => f.addEventListener("click", () => {
+      const g = wrap.dataset.pfFilters;
+      filterOf[g] = f.dataset.pfFilter;
+      if (g === "photography") hero.setCategory(filterOf.photography);
+      syncFilters(g);
+      render();
+    })));
     if (toggle) toggle.addEventListener("click", () => setExpanded(!expanded));
     setExpanded(false);
+    if (location.hash === "#designs") setGroup("designs", false);
   }
 
   /* Portfolio page: Campaigns / Brand & design filter and the per-card story toggles. */
