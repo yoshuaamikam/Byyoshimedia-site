@@ -982,3 +982,20 @@
 .sw-lightbox {
     z-index: 2000;
 }
+
+/* Horizontal swipes inside the lightbox step photos; without these the browser reads them as
+   the back/forward edge gesture or pans the page behind. */
+.sw-lightbox,
+.sw-lightbox img,
+.sw-lightbox-nav {
+    touch-action: pan-y pinch-zoom;
+    overscroll-behavior: contain;
+}
+.sw-lightbox img {
+    -webkit-user-drag: none;
+    user-select: none;
+}
+html.sw-lb-open,
+html.sw-lb-open body {
+    overscroll-behavior-x: none;
+}
