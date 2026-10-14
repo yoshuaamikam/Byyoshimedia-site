@@ -79,7 +79,7 @@
 
   const WORK_LB_BLANK = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
   const HOME_WORK_PREVIEW = 6;
-  let workLbPrevOverflow = "", workLbReturnFocus = null, workLbWired = false, workLbAnon = false;
+  let workLbPrevOverflow = "", workLbReturnFocus = null, workLbWired = false;
   let workLbPlaylist = [], workLbIndex = 0, workLbTouch = null;
 
   const prefersReducedMotion = () =>
@@ -144,12 +144,9 @@
     const lbPrev = document.getElementById("swLightboxPrev");
     const lbNext = document.getElementById("swLightboxNext");
     lbImg.src = p.img;
-    lbImg.alt = workLbAnon ? p.c : p.t;
+    lbImg.alt = p.t;
     if (lbCat) lbCat.textContent = p.c;
-    if (lbTitle) {
-      lbTitle.hidden = workLbAnon;
-      lbTitle.textContent = workLbAnon ? "" : p.t;
-    }
+    if (lbTitle) lbTitle.textContent = p.t;
     const multi = workLbPlaylist.length > 1;
     if (lbCount) {
       lbCount.hidden = !multi;
@@ -157,6 +154,41 @@
     }
     if (lbPrev) lbPrev.hidden = !multi;
     if (lbNext) lbNext.hidden = !multi;
+    const thumbs = document.getElementById("swLightboxThumbs");
+    if (thumbs) {
+      thumbs.hidden = !multi;
+      [...thumbs.children].forEach((btn, i) => {
+        const on = i === workLbIndex;
+        btn.classList.toggle("is-active", on);
+        if (on) btn.setAttribute("aria-current", "true"); else btn.removeAttribute("aria-current");
+      });
+    }
+  }
+
+  /* One thumbnail per photo in the shoot; the active one is outlined in red. */
+  function renderWorkLightboxThumbs() {
+    const thumbs = document.getElementById("swLightboxThumbs");
+    if (!thumbs) return;
+    thumbs.replaceChildren();
+    if (workLbPlaylist.length < 2) return;
+    const total = workLbPlaylist.length;
+    workLbPlaylist.forEach((item, i) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "sw-lightbox-thumb";
+      btn.setAttribute("aria-label", `Show photo ${i + 1} of ${total}: ${item.t}`);
+      const img = document.createElement("img");
+      img.src = item.img;
+      img.alt = "";
+      img.decoding = "async";
+      btn.append(img);
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        workLbIndex = i;
+        showWorkLightboxPhoto();
+      });
+      thumbs.append(btn);
+    });
   }
 
   function stepWorkLightbox(dir) {
@@ -169,11 +201,11 @@
     const lb = document.getElementById("swLightbox"), lbImg = document.getElementById("swLightboxImg");
     if (!lb || !lbImg || !p) return;
     const lbClose = document.getElementById("swLightboxClose");
-    workLbAnon = !!(opts && opts.anon);
     workLbPlaylist = Array.isArray(opts && opts.playlist) && opts.playlist.length ? opts.playlist.slice() : [p];
     const fromOpts = typeof (opts && opts.index) === "number" ? opts.index : workLbPlaylist.findIndex((item) => item && item.img === p.img);
     workLbIndex = fromOpts >= 0 ? fromOpts : 0;
     workLbReturnFocus = triggerEl && typeof triggerEl.focus === "function" ? triggerEl : null;
+    renderWorkLightboxThumbs();
     showWorkLightboxPhoto();
     workLbPrevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -190,6 +222,8 @@
     if (lbImg) lbImg.src = WORK_LB_BLANK;
     workLbPlaylist = [];
     workLbIndex = 0;
+    const thumbsHost = document.getElementById("swLightboxThumbs");
+    if (thumbsHost) { thumbsHost.replaceChildren(); thumbsHost.hidden = true; }
     document.body.style.overflow = workLbPrevOverflow;
     document.documentElement.classList.remove("sw-lb-open");
     workLbPrevOverflow = "";
