@@ -23,7 +23,7 @@
 
   const ALT_CREDIT = "Yoshua Israel-Dugeon";
 
-  /* `hero` marks the nine photos the portfolio hero cycles through, in order; its value is
+  /* `hero` marks the ten photos (incl. the Wedding cover) the portfolio hero cycles through, in order; its value is
      the full-frame derivative used by the carousel. */
   const SW_PROJECTS = [
     { t: "Michigan State", c: "Graduation", img: "./assets/graduation/P1020352-680185ce-656f-44a5-8654-5a3439415c52.png", pos: "50% 36%", hero: "./assets/portfolio-hero/michigan-state.webp" },
@@ -53,6 +53,13 @@
     { t: "Stop & Smell", c: "Street", img: "./assets/street/pets/IMG_9166.jpeg", pos: "62% 20%", hero: "./assets/portfolio-hero/stop-and-smell.webp" },
     { t: "The Prowl", c: "Street", img: "./assets/street/pets/IMG_9170.jpeg", pos: "62% 78%" },
     { t: "Blep", c: "Street", img: "./assets/street/pets/IMG_9171.jpeg", pos: "68% 12%" },
+    { t: "Averi's Wedding", c: "Wedding", img: "./assets/wedding/averi-wedding-01.webp", pos: "50% 35%", hero: "./assets/wedding/averi-wedding-01.webp" },
+    { t: "With Mom", c: "Wedding", img: "./assets/wedding/averi-wedding-02.webp", pos: "50% 35%" },
+    { t: "Bouquet", c: "Wedding", img: "./assets/wedding/averi-wedding-03.webp", pos: "50% 35%" },
+    { t: "Bluebird Kiss", c: "Wedding", img: "./assets/wedding/averi-wedding-04.webp", pos: "50% 35%" },
+    { t: "By the Creek", c: "Wedding", img: "./assets/wedding/averi-wedding-05.webp", pos: "50% 35%" },
+    { t: "With Grandma", c: "Wedding", img: "./assets/wedding/averi-wedding-06.webp", pos: "50% 35%" },
+    { t: "Wishing Well", c: "Wedding", img: "./assets/wedding/averi-wedding-07.webp", pos: "50% 35%" },
   ];
 
   const ALLY_SLIDE = "./assets/campaigns/ally-strategy.png";
@@ -69,6 +76,7 @@
     { id: "portrait-2020-11-03", photos: ["Rewind", "Stairwell"] },
     { id: "street-2020-10-18", photos: ["Hat Tree", "The Rotation", "Silver Spoons"] },
     { id: "pets", photos: ["Stop & Smell", "The Prowl", "Blep"] },
+    { id: "averi-wedding", photos: ["Averi's Wedding", "With Mom", "Bouquet", "Bluebird Kiss", "By the Creek", "With Grandma", "Wishing Well"] },
   ];
   const SHOOT_OF = new Map();
   SW_SHOOTS.forEach((shoot) => shoot.photos.forEach((title) => SHOOT_OF.set(title, shoot.id)));
