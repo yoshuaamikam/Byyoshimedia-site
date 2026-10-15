@@ -35,6 +35,13 @@
     { t: "Spartan Stadium", c: "Graduation", img: "./assets/graduation/P1020104-ec6472c2-b3f8-48f4-b664-31214cb04c64.png", pos: "50% 32%" },
     { t: "Gratitude", c: "Graduation", img: "./assets/graduation/P1020297-bdfa6786-528f-4790-a1a9-0784e9294dd1.png", pos: "38% 22%", hero: "./assets/portfolio-hero/gratitude.webp" },
     { t: "Green & Gold", c: "Graduation", img: "./assets/graduation/P1020362-7d5a342a-4ee7-40e3-8eae-620b316d5c20.png", pos: "62% 18%" },
+    { t: "Averi's Wedding", c: "Wedding", img: "./assets/wedding/averi-wedding-01.webp", pos: "50% 35%", hero: "./assets/wedding/averi-wedding-01.webp" },
+    { t: "With Mom", c: "Wedding", img: "./assets/wedding/averi-wedding-02.webp", pos: "50% 35%", hero: "./assets/wedding/averi-wedding-02.webp" },
+    { t: "Bouquet", c: "Wedding", img: "./assets/wedding/averi-wedding-03.webp", pos: "50% 35%" },
+    { t: "Bluebird Kiss", c: "Wedding", img: "./assets/wedding/averi-wedding-04.webp", pos: "50% 35%", hero: "./assets/wedding/averi-wedding-04.webp" },
+    { t: "By the Creek", c: "Wedding", img: "./assets/wedding/averi-wedding-05.webp", pos: "50% 35%" },
+    { t: "With Grandma", c: "Wedding", img: "./assets/wedding/averi-wedding-06.webp", pos: "50% 35%" },
+    { t: "Wishing Well", c: "Wedding", img: "./assets/wedding/averi-wedding-07.webp", pos: "50% 35%" },
     { t: "Off the Wall", c: "Portraits", img: "./assets/portraits/IMG_2136.jpeg", pos: "55% 16%", hero: "./assets/portfolio-hero/off-the-wall.webp" },
     { t: "Poolside", c: "Portraits", img: "./assets/portraits/IMG_0090.jpeg", pos: "50% 22%", hero: "./assets/portfolio-hero/poolside.webp" },
     { t: "AKA", c: "Portraits", img: "./assets/portraits/IMG_0662.jpeg", pos: "62% 18%" },
@@ -53,13 +60,6 @@
     { t: "Stop & Smell", c: "Street", img: "./assets/street/pets/IMG_9166.jpeg", pos: "62% 20%", hero: "./assets/portfolio-hero/stop-and-smell.webp" },
     { t: "The Prowl", c: "Street", img: "./assets/street/pets/IMG_9170.jpeg", pos: "62% 78%" },
     { t: "Blep", c: "Street", img: "./assets/street/pets/IMG_9171.jpeg", pos: "68% 12%" },
-    { t: "Averi's Wedding", c: "Wedding", img: "./assets/wedding/averi-wedding-01.webp", pos: "50% 35%", hero: "./assets/wedding/averi-wedding-01.webp" },
-    { t: "With Mom", c: "Wedding", img: "./assets/wedding/averi-wedding-02.webp", pos: "50% 35%", hero: "./assets/wedding/averi-wedding-02.webp" },
-    { t: "Bouquet", c: "Wedding", img: "./assets/wedding/averi-wedding-03.webp", pos: "50% 35%" },
-    { t: "Bluebird Kiss", c: "Wedding", img: "./assets/wedding/averi-wedding-04.webp", pos: "50% 35%", hero: "./assets/wedding/averi-wedding-04.webp" },
-    { t: "By the Creek", c: "Wedding", img: "./assets/wedding/averi-wedding-05.webp", pos: "50% 35%" },
-    { t: "With Grandma", c: "Wedding", img: "./assets/wedding/averi-wedding-06.webp", pos: "50% 35%" },
-    { t: "Wishing Well", c: "Wedding", img: "./assets/wedding/averi-wedding-07.webp", pos: "50% 35%" },
   ];
 
   const ALLY_SLIDE = "./assets/campaigns/ally-strategy.png";
